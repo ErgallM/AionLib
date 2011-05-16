@@ -135,7 +135,7 @@
                 <div class="items">
                     <img src="/images/ap/crown_4.png" />
                     Бесценная древняя корона
-                    <span>(6900 ап)</span>
+                    <span>(9600 ап)</span>
                     <input type="text" name="items[crown][3]" value="0" />
                 </div>
             </div>
