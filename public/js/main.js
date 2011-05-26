@@ -16,6 +16,8 @@ var Ap = new Class({
          */
         resultId: null,
 
+        
+
         /**
          * Цена итемов
          */
@@ -24,7 +26,9 @@ var Ap = new Class({
             'seal'  : [600, 1200, 1800, 2400],
             'cup'   : [1200, 2400, 3600, 4800],
             'crown' : [2400, 4800, 7200, 9600]
-        }
+        },
+
+        users: {}
     },
 
     initialize: function (options) {
@@ -55,6 +59,10 @@ var Ap = new Class({
             }
         });
 
+        $('calcPeople').addEvent('click', function() {
+            that.calcPersone();
+        });
+
         return this;
     },
 
@@ -82,5 +90,23 @@ var Ap = new Class({
         }
 
         return (allAp + startAp);
+    },
+    calcPersone: function() {
+        var items = $(this.options.formId).serialize(true);
+        var itemsAp = this.options.itemsAp;
+
+        var stek = [];
+
+        if (!items.items) throw new Error("items empty");
+
+        // Заполняем стек
+        Object.each(items.items, function(value, key) {
+            Object.each(value, function(valueItem, valueKey) {
+                for (var i = 0; i < valueItem; i++) {
+                    
+                }
+            });
+        });
+
     }
 });
