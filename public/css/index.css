@@ -1,0 +1,11 @@
+.menu {
+    list-style: none;
+    text-align: left;
+    font-size: 1.5em;
+    width: 500px;
+    margin: 0 auto;
+}
+
+.menu span {
+    float: right;
+}

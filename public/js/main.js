@@ -16,7 +16,7 @@ var Ap = new Class({
          */
         resultId: null,
 
-        
+        usersCoundId: null,
 
         /**
          * Цена итемов
@@ -28,14 +28,16 @@ var Ap = new Class({
             'crown' : [2400, 4800, 7200, 9600]
         },
 
-        users: {}
+        users: []
     },
+    startOptions: {},
 
     initialize: function (options) {
         this.setOptions(options);
+        this.startOptions = Object.clone(this.options);
 
         var that = this;
-        $$('#' + this.options.formId + " input[type='text'], #"+ this.options.startApId).addEvents({
+        $$('#' + this.options.formId + " input[type='text'], #"+ this.options.startApId + ', #' + this.options.usersCoundId).addEvents({
             'focus': function() {
                 var value = Number.from($(this).get('value'));
                 if (!value) $(this).set('value', '');
@@ -59,9 +61,17 @@ var Ap = new Class({
             }
         });
 
-        $('calcPeople').addEvent('click', function() {
+        $('calcPeople').addEvent('click', function(e) {
             that.calcPersone();
+            e.stop();
+            return false;
         });
+
+        $('clear').addEvent('click', function(e) {
+            that.clear();
+            e.stop();
+            return false;
+        })
 
         return this;
     },
@@ -92,21 +102,75 @@ var Ap = new Class({
         return (allAp + startAp);
     },
     calcPersone: function() {
+        var userCound = Number.from($(this.options.usersCoundId).get('value'));
+        if (!userCound) throw new Error("userCound is empty");
+
         var items = $(this.options.formId).serialize(true);
+        if (!items.items) throw new Error("items is empty");
+
         var itemsAp = this.options.itemsAp;
 
-        var stek = [];
 
-        if (!items.items) throw new Error("items empty");
+        var stek = [];
+        var allPrice = 0;
+
 
         // Заполняем стек
         Object.each(items.items, function(value, key) {
             Object.each(value, function(valueItem, valueKey) {
+                var itemAp = itemsAp[key][valueKey];
                 for (var i = 0; i < valueItem; i++) {
-                    
+                    stek = Array.append([itemAp], stek);
+                    allPrice += itemAp;
                 }
             });
         });
 
+        var users = this.options.users;
+        var srez = allPrice / userCound;
+
+        for (var userId = 0; userId < userCound; userId++) {
+            if (undefined == users[userId]) users[userId] = 0;
+
+            if (users[userId] >= srez) continue;
+
+            for (var itemId in stek) {
+                if ((users[userId] + stek[itemId]) <= srez) {
+                    users[userId] += stek[itemId];
+                    stek[itemId] = null;
+                }
+                if (users[userId] >= srez) break;
+            }
+        }
+
+        var getMinUser = function(users) {
+            var minId = null, minValue = null;
+            users.each(function(value, key) {
+                if (null == minId) {
+                    minId = key;
+                    minValue = value;
+                    return;
+                }
+
+                if (value < minValue) {
+                    minId = key;
+                    minValue = value;
+                }
+            });
+
+            return {key: minId, value: minValue};
+        }
+
+        stek.each(function(value) {
+            if (!value) return;
+
+            var minUser = getMinUser(users);
+            users[minUser.key] += value;
+        });
+
+        console.log(users);
+    },
+    clear: function() {
+        this.setOptions(this.startOptions);
     }
 });

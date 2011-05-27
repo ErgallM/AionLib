@@ -147,14 +147,17 @@
 
         <div><div class="end">Итогове количество очков бездны после обмена:</div> <span id="end">0</span></div>
 
-        <div><label>Количество игроков: <input type="text" id="usersCound" name="usersCound" value="0" /></label></div>
+        <div><label>Количество игроков: <select type="text" id="usersCound" name="usersCound">
+                <option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
+            </select></label></div>
         <div><a href="#" id="calcPeople">Распределить</a></div>
+        <a href="#" id="clear">Сброс</a>
     </div>
 
 
     <script language="javascript">
         window.addEvent('domready', function() {
-            var a = new Ap({'formId':'items', 'resultId': 'end', 'startApId': 'now-ap'});
+            var a = new Ap({'formId':'items', 'resultId': 'end', 'startApId': 'now-ap', usersCoundId: 'usersCound'});
         })
     </script>
 </body>
