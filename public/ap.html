@@ -19,146 +19,25 @@
     <script language="javascript" src="/js/main.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h2 align="center">Aion Library &mdash; Калькулятор АП</h2>
-
-        <ul>
-            <li><a href="/">На главную</a></li>
-        </ul>
-
-        <p><label>Текущее количество очков бездны <input type="text" id="now-ap" name="now-ap" value="0" /></label></p>
-
-        <form id="items" method="post">
-        <div class="span-24 last">
-            <div class="span-10">
-                <div class="items">
-                    <img src="/images/ap/icon_1.png" />
-                    Простая древняя икона
-                    <span>(300 ап)</span>
-                    <input type="text" name="items[icon][0]" value="0" />
-                </div>
-                <div class="items">
-                    <img src="/images/ap/icon_2.png" />
-                    Обычная древняя икона
-                    <span>(600 ап)</span>
-                    <input type="text" name="items[icon][1]" value="0" />
-                </div>
-                <div class="items">
-                    <img src="/images/ap/icon_3.png" />
-                    Дорогая древняя икона
-                    <span>(900 ап)</span>
-                    <input type="text" name="items[icon][2]" value="0" />
-                </div>
-                <div class="items">
-                    <img src="/images/ap/icon_4.png" />
-                    Бесценная древняя икона
-                    <span>(1200 ап)</span>
-                    <input type="text" name="items[icon][3]" value="0" />
-                </div>
-            </div>
-            <div class="span-2">&nbsp;</div>
-            <div class="span-10 last">
-                <div class="items">
-                    <img src="/images/ap/seal_1.png" />
-                    Простая древняя печать
-                    <span>(600 ап)</span>
-                    <input type="text" name="items[seal][0]" value="0" />
-                </div>
-                <div class="items">
-                    <img src="/images/ap/seal_2.png" />
-                    Обычная древняя печать
-                    <span>(1200 ап)</span>
-                    <input type="text" name="items[seal][1]" value="0" />
-                </div>
-                <div class="items">
-                    <img src="/images/ap/seal_3.png" />
-                    Дорогая древняя печать
-                    <span>(1800 ап)</span>
-                    <input type="text" name="items[seal][2]" value="0" />
-                </div>
-                <div class="items">
-                    <img src="/images/ap/seal_4.png" />
-                    Бесценная древняя печать
-                    <span>(2400 ап)</span>
-                    <input type="text" name="items[seal][3]" value="0" />
-                </div>
-            </div>
-
-            <hr class="space" />
-
-            <div class="span-10">
-                <div class="items">
-                    <img src="/images/ap/cup_1.png" />
-                    Простая древняя чаша
-                    <span>(1200 ап)</span>
-                    <input type="text" name="items[cup][0]" value="0" />
-                </div>
-
-                <div class="items">
-                    <img src="/images/ap/cup_2.png" />
-                    Обычная древняя чаша
-                    <span>(2400 ап)</span>
-                    <input type="text" name="items[cup][1]" value="0" />
-                </div>
-                <div class="items">
-                    <img src="/images/ap/cup_3.png" />
-                    Дорогая древняя чаша
-                    <span>(3600 ап)</span>
-                    <input type="text" name="items[cup][2]" value="0" />
-                </div>
-                <div class="items">
-                    <img src="/images/ap/cup_4.png" />
-                    Бесценная древняя чаша
-                    <span>(4800 ап)</span>
-                    <input type="text" name="items[cup][3]" value="0" />
-                </div>
-            </div>
-            <div class="span-2">&nbsp;</div>
-            <div class="span-10 last">
-                <div class="items">
-                    <img src="/images/ap/crown_1.png" />
-                    Простая древняя корона
-                    <span>(2400 ап)</span>
-                    <input type="text" name="items[crown][0]" value="0" />
-                </div>
-                <div class="items">
-                    <img src="/images/ap/crown_2.png" />
-                    Обычная древняя корона
-                    <span>(4800 ап)</span>
-                    <input type="text" name="items[crown][1]" value="0" />
-                </div>
-                <div class="items">
-                    <img src="/images/ap/crown_3.png" />
-                    Дорогая древняя корона
-                    <span>(7200 ап)</span>
-                    <input type="text" name="items[crown][2]" value="0" />
-                </div>
-                <div class="items">
-                    <img src="/images/ap/crown_4.png" />
-                    Бесценная древняя корона
-                    <span>(9600 ап)</span>
-                    <input type="text" name="items[crown][3]" value="0" />
-                </div>
-            </div>
-        </div>
-        </form>
-
-        <hr class="space" />
-
-        <div><div class="end">Итогове количество очков бездны после обмена:</div> <span id="end">0</span></div>
-
-        <div><label>Количество игроков: <select type="text" id="usersCound" name="usersCound">
-                <option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
-            </select></label></div>
-        <div><a href="#" id="calcPeople">Распределить</a></div>
-        <a href="#" id="clear">Сброс</a>
+<div class="header">
+    <img src="/images/logo.png" />
+    <h1>Aion Library</h1>
+    <h3>Aion abyss points AP calculator</h3>
+</div>
+<div class="content-items">
+    <div class="span-8">
+        span
+    </div>
+    <div class="span-1">&nbsp;</div>
+    <div class="span-8">
+        span
+    </div>
+    <div class="span-1">&nbsp;</div>
+    <div class="span-5 last">
+        last
     </div>
 
-
-    <script language="javascript">
-        window.addEvent('domready', function() {
-            var a = new Ap({'formId':'items', 'resultId': 'end', 'startApId': 'now-ap', usersCoundId: 'usersCound'});
-        })
-    </script>
+    <div class="clear"></div>
+</div>
 </body>
 </html>
