@@ -61,6 +61,7 @@ var Ap = new Class({
             }
         });
 
+        /*
         $('calcPeople').addEvent('click', function(e) {
             that.calcPersone();
             e.stop();
@@ -72,6 +73,7 @@ var Ap = new Class({
             e.stop();
             return false;
         })
+        */
 
         return this;
     },
