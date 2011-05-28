@@ -246,7 +246,7 @@
                     <option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
                 </select>
             </label>
-            &mdash; <a href="#">Распределить на группу</a>
+            &mdash; <a href="#" class="calcPeople">Распределить на группу</a>
         </div>
 
         <div id="content-group-legend">
@@ -307,7 +307,7 @@
 
     <p>
         <a href="#">Сброс</a><br />
-        <a href="#">Распределить на группу</a>
+        <a href="#" class="calcPeople">Распределить на группу</a>
     </p>
     <p>
         <a href="#">Получить ссылку на билд</a>
@@ -316,7 +316,7 @@
 
 <script language="javascript">
     window.addEvent('domready', function() {
-        var a = new Ap({'formId':'items', 'resultId': 'aps-all'});
+        var a = new Ap({'formId':'items', 'resultId': 'aps-all', 'usersCoundId': 'userCound', 'buttons': {'calcPeople': $$('.calcPeople')}});
     });
 </script>
 </body>
