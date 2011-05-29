@@ -211,7 +211,7 @@ var Ap = new Class({
             }
         });
 
-        console.log(users, usersItems);
+        //console.log(users, usersItems);
         this.addPerconeResultLine(users, usersItems);
     },
     clear: function() {
@@ -220,6 +220,7 @@ var Ap = new Class({
         $(this.options.resultId).set('text', '0');
         $$('input[type=text]').set('value', '0');
         $(this.options.usersGroupLegend).set('html', '');
+        $(this.options.groupNowApId).set('html', '');
     },
     clearToNext: function() {
         $(this.options.resultId).set('text', '0');
