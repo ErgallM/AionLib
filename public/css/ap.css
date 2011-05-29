@@ -73,6 +73,13 @@
 }
 .group-block-title span {
     color: #a80000;
+    padding-left: 10px;
+}
+.group-block-title small {
+    display: block;
+    text-align: right;
+    font-size: 0.5em;
+    color: #838281;
 }
 .group-block-item {
     margin-top: 10px;

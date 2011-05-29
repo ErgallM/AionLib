@@ -34,15 +34,25 @@ var Ap = new Class({
 
         users: [],
         usersItems: [],
+        usersGroupLegend: null,
+        iterationN: 0,
+
+        groupNowApId: null,
 
         shablon: {
-            block:  '<div class="group-block"><div class="group-block-title left">{userId}<span>{userAp}</span></div>' +
-                        '<div class="group-block-items right">{items}</div><div class="clear"></div>' +
-            '</div>',
+            iterationBlock: '<div><a href="#iteration-{iterationN}" name="iteration-{iterationN}" onclick="$(\'iteration-{iterationN}\').toggleClass(\'hide\');">Распределение #{iterationN}</a>' +
+                    '<div id="iteration-{iterationN}" class="iteration-conteiner">{block}</div>' +
+                    '</div>',
 
-            items:  '<div class="group-block-item"><img src="/images/ap/{itemName}_{itemN}.png" />{itemFullName}' +
-                    '<span>9600 APs</span><div class="clear"></div>' +
-            '</div>'
+            block:  '<div class="group-block"><div class="group-block-title left">{userId}<span>{userAp}</span><small>+{userAddAp}</small></div>' +
+                    '<div class="group-block-items right">{items}</div><div class="clear"></div>' +
+                    '</div><hr class="space" />',
+
+            items:  '<div class="group-block-item"><img src="/images/ap/{itemName}_{itemN}.png" />{itemFullName} ' +
+                    '<span>{itemAp} APs</span><div class="clear"></div>' +
+                    '</div>',
+
+            groupNowAp: '<div>{userId} &mdash; {userAp} Aps</div>'
 
         }
     },
@@ -85,13 +95,11 @@ var Ap = new Class({
             });
         }
 
-        /*
         $('clear').addEvent('click', function(e) {
             that.clear();
             e.stop();
             return false;
         })
-        */
 
         return this;
     },
@@ -156,10 +164,8 @@ var Ap = new Class({
         var usersItems = Array.clone(this.options.usersItems);
 
         for (var userId = 0; userId < userCound; userId++) {
-            if (undefined == users[userId]) {
-                users[userId] = 0;
-                usersItems[userId] = [];
-            }
+            if (undefined == users[userId]) users[userId] = 0;
+            if (undefined == usersItems[userId]) usersItems[userId] = [];
 
             if (users[userId] >= srez) continue;
 
@@ -170,7 +176,7 @@ var Ap = new Class({
 
                         usersItems[userId].append([stek[itemId]]);
 
-                        console.log(stek[itemId], itemId);
+                        //console.log(stek[itemId], itemId);
                         stek[itemId] = null;
                     }
                 }
@@ -210,11 +216,80 @@ var Ap = new Class({
     },
     clear: function() {
         this.setOptions(this.startOptions);
+
+        $(this.options.resultId).set('text', '0');
+        $$('input[type=text]').set('value', '0');
+        $(this.options.usersGroupLegend).set('html', '');
     },
-    addPerconeResultLine: function(users) {
-        users.each(function(user, key) {
-            var item = this.options.shablon.items;
-            console.log(user, key);
+    clearToNext: function() {
+        $(this.options.resultId).set('text', '0');
+        $$('input[type=text]').set('value', '0');
+    },
+    addPerconeResultLine: function(users, usersItems) {
+        var that = this;
+
+        if (!that.options.usersGroupLegend) throw new Error('usersGroupLegend is null');
+
+        var blockHtml = '';
+        
+        users.each(function(userAp, userId) {
+            var itemsHtml = '';
+            var userAddAp = 0;
+
+            usersItems[userId].each(function(value) {
+                var item = String.from(that.options.shablon.items);
+                item = item.substitute({
+                    'itemName': value.name,
+                    'itemN': value.n,
+                    'itemAp': value.ap,
+                    'itemFullName': 'test'
+                });
+
+                userAddAp += value.ap;
+                itemsHtml += item;
+            });
+
+            var block = String.from(that.options.shablon.block);
+
+            block = block.substitute({
+                'userId': userId + 1,
+                'userAp': userAp,
+                'userAddAp': userAddAp,
+                'iterationN': that.options.iterationN,
+                'items': itemsHtml
+            });
+
+            blockHtml += block;
         });
+
+        var iterationHtml = String.from(that.options.shablon.iterationBlock);
+            iterationHtml = iterationHtml.substitute({
+                'iterationN': that.options.iterationN,
+                'block': blockHtml
+            });
+
+        that.options.iterationN++;
+
+        $$('.iteration-conteiner').addClass('hide');
+
+        var el = $(that.options.usersGroupLegend);
+            el.set('html', el.get('html') + iterationHtml);
+
+        this.clearToNext();
+        this.showUsersNowAp();
+    },
+    showUsersNowAp: function() {
+        var users = this.options.users;
+        var that = this;
+
+        var html = '';
+        users.each(function(userAp, userId) {
+            html += String.from(that.options.shablon.groupNowAp).substitute({
+                'userId': (userId + 1),
+                'userAp': userAp
+            });
+        });
+
+        $(that.options.groupNowApId).set('html', html);
     }
 });

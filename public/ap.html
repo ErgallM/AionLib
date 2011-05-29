@@ -250,51 +250,6 @@
         </div>
 
         <div id="content-group-legend">
-            <div class="group-block">
-                <div class="group-block-title left">
-                    1
-                    <span>3600</span>
-                </div>
-                <div class="group-block-items right">
-                    <div class="group-block-item">
-                        <img src="/images/ap/crown_3.png" />
-                        Бесценная древняя корона
-                        <span>9600 APs</span>
-                        <div class="clear"></div>
-                    </div>
-                    <div class="group-block-item">
-                        <img src="/images/ap/crown_3.png" />
-                        Бесценная древняя корона
-                        <span>9600 APs</span>
-                        <div class="clear"></div>
-                    </div>
-                    <div class="group-block-item">
-                        <img src="/images/ap/crown_3.png" />
-                        Бесценная древняя корона
-                        <span>9600 APs</span>
-                        <div class="clear"></div>
-                    </div>
-                </div>
-                <div class="clear"></div>
-            </div>
-
-            <hr class="space" />
-
-            <div class="group-block">
-                <div class="group-block-title left">
-                    1
-                    <span>3600</span>
-                </div>
-                <div class="group-block-items right">
-                    <div class="group-block-item">
-                        <img src="/images/ap/crown_3.png" />
-                        Бесценная древняя корона
-                        <span>9600 APs</span>
-                        <div class="clear"></div>
-                    </div>
-                </div>
-                <div class="clear"></div>
-            </div>
         </div>
 
         <div class="clear"></div>
@@ -302,21 +257,37 @@
 </div>
 
 <div class="right-menu">
-    <div id="aps-all" class="aps-all">0</div>
-    <p>Ваши очки бездны</p>
-
+    <h3>Ваши очки бездны</h3>
+    <p id="aps-all" class="aps-all">0</p>
     <p>
-        <a href="#">Сброс</a><br />
+        <a href="#" id="clear">Сброс</a><br />
         <a href="#" class="calcPeople">Распределить на группу</a>
     </p>
     <p>
         <a href="#">Получить ссылку на билд</a>
     </p>
+
+    <p>&nbsp;</p>
+    
+    <div>
+        <h3>Сейчас на руках:</h3>
+        <div id="groupNowAp">
+        </div>
+    </div>
 </div>
 
 <script language="javascript">
     window.addEvent('domready', function() {
-        var a = new Ap({'formId':'items', 'resultId': 'aps-all', 'usersCoundId': 'userCound', 'buttons': {'calcPeople': $$('.calcPeople')}});
+        var a = new Ap({
+            'formId':'items',
+            'resultId': 'aps-all',
+            'usersCoundId': 'userCound',
+            'usersGroupLegend': 'content-group-legend',
+            'groupNowApId': 'groupNowAp',
+            'buttons': {
+                'calcPeople': $$('.calcPeople')
+            }
+        });
     });
 </script>
 </body>
