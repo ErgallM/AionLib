@@ -314,12 +314,16 @@ var Ap = new Class({
         var that = this;
 
         var html = '';
+        var allAp = 0;
         users.each(function(userAp, userId) {
             html += String.from(that.options.shablon.groupNowAp).substitute({
                 'userId': (userId + 1),
                 'userAp': userAp
             });
+            allAp += userAp;
         });
+
+        html += '<span style="border-top: 1px solid #000;">Всего AP: ' + allAp + '</span>';
 
         $(that.options.groupNowApId).set('html', html);
     }
