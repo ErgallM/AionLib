@@ -1,0 +1,90 @@
+{
+    {
+        name: 'HP +20',
+        color: '#fff',
+        image: '/images/data/magic-stoun/hp-white.png',
+        addStatus: {
+            hp: 20
+        }
+    },
+    {
+        name: 'HP +30'
+        color: '#fff',
+        image: '/images/data/magic-stoun/hp-white.png',
+        addStatus: {
+            hp: 30
+        }
+    },
+    {
+        name: 'HP +40',
+        color: '#fff',
+        image: '/images/data/magic-stoun/hp-white.png',
+        addStatus:  {
+            hp: 40
+        }
+    },
+    {
+        name: 'HP +50',
+        color: '#fff',
+        image: '/images/data/magic-stoun/hp-white.png',
+        addStatus: {
+            hp: 50
+        }
+    },
+    {
+        name: 'HP +60',
+        color: '#fff',
+        image: '/images/data/magic-stoun/hp-white.png',
+        addStatus: {
+            hp: 60
+        }
+    },
+    {
+        name: 'HP +70',
+        color: '#fff',
+        image: '/images/data/magic-stoun/hp-white.png',
+        addStatus: {
+            hp: 70
+        }
+    },
+    {
+        name: 'HP +55',
+        color: '#69e15e',
+        image: '/images/data/magic-stoun/hp-green.png',
+        addStatus: {
+            hp: 55
+        }
+    },
+    {
+        name: 'HP +65',
+        color: '#69e15e',
+        image: '/images/data/magic-stoun/hp-green.png',
+        addStatus: {
+            hp: 65
+        }
+    },
+    {
+        name: 'HP +75',
+        color: '#69e15e',
+        image: '/images/data/magic-stoun/hp-green.png',
+        addStatus: {
+            hp: 75
+        }
+    },
+    {
+        name: 'HP +85',
+        color: '#69e15e',
+        image: '/images/data/magic-stoun/hp-green.png',
+        addStatus: {
+            hp: 85
+        }
+    },
+    {
+        name: 'HP +95',
+        color: '#69e15e',
+        image: '/images/data/magic-stoun/hp-green.png',
+        addStatus: {
+            hp: 95
+        }
+    }
+}
