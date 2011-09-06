@@ -10,6 +10,10 @@ class Xml extends \Yap\Config\Config
      */
     protected $_XML_ELEMENT_ARRAY_KEY_NAME = 'key';
 
+    protected $_ARRAY_KEY = 'key';
+    protected $_NAME_KEY = 'name';
+    protected $_VALUE_KEY = 'value';
+
     public function __construct($xml, $selection = null)
     {
         $config = $this->_loadXmlFile($xml, $selection);
@@ -45,12 +49,12 @@ class Xml extends \Yap\Config\Config
     private function parseNode(\SimpleXmlElement $node, &$nodeName)
     {
         $attr = $this->getAttributes($node);
-        if (!empty($attr['name'])) {
-            $nodeName = (string) $attr['name'];
-            unset($attr['name']);
+        if (!empty($attr[$this->_NAME_KEY])) {
+            $nodeName = (string) $attr[$this->_NAME_KEY];
+            unset($attr[$this->_NAME_KEY]);
         }
-        $nodeNameKey = (!empty($attr[$this->_XML_ELEMENT_ARRAY_KEY_NAME])) ? (string) $attr[$this->_XML_ELEMENT_ARRAY_KEY_NAME] : null;
-        unset($attr[$this->_XML_ELEMENT_ARRAY_KEY_NAME]);
+        $nodeNameKey = (!empty($attr[$this->_ARRAY_KEY])) ? (string) $attr[$this->_ARRAY_KEY] : null;
+        unset($attr[$this->_ARRAY_KEY]);
 
         $nodeValue = null;
 
@@ -75,9 +79,9 @@ class Xml extends \Yap\Config\Config
                 }
                 $nodeValue = (string) simplexml_import_dom($dom);
             } else {
-                if (isset($attr['value'])) {
-                    $nodeValue = $attr['value'];
-                    unset($attr['value']);
+                if (isset($attr[$this->_VALUE_KEY])) {
+                    $nodeValue = $attr[$this->_VALUE_KEY];
+                    unset($attr[$this->_VALUE_KEY]);
                 } else {
                     $nodeValue = (string) $node;
                 }
@@ -147,8 +151,8 @@ class Xml extends \Yap\Config\Config
             }
 
             // Определение ключей массива одноименных элементов
-            $nodeNameKey = (!empty($attr[$this->_XML_ELEMENT_ARRAY_KEY_NAME])) ? (string) $attr[$this->_XML_ELEMENT_ARRAY_KEY_NAME] : null;
-            unset($attr[$this->_XML_ELEMENT_ARRAY_KEY_NAME]);
+            $nodeNameKey = (!empty($attr[$this->_ARRAY_KEY])) ? (string) $attr[$this->_ARRAY_KEY] : null;
+            unset($attr[$this->_ARRAY_KEY]);
 
             $parserNode = $this->parseNode($node, $nodeName);
 
