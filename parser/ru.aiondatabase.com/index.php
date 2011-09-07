@@ -481,8 +481,25 @@ foreach($items as $itemName => $ids) {
     echo "$all/$i - $x\n";
 }
 */
-$all = 200000000 - 100000000;
-for ($x = 100000000; $x <= 200000000; $x++) {
+
+$options = array(
+    'start' => 100000000,
+    'end'   => 200000000
+);
+
+if ($argc > 1) {
+    foreach ($argv as $com) {
+        if (0 === strpos($com, '-')) {
+            $varName = substr($com, 1, strpos($com, '=') - 1);
+            $varValue = substr($com, strpos($com, '=') + 1);
+
+            if (isset($options[$varName])) $options[$varName] = $varValue;
+        }
+    }
+}
+
+$all = $options['end'] - $options['start'];
+for ($x = $options['start']; $x <= $options['end']; $x++) {
     $i++;
 
     $item = $parser->parser($parser->getPageContent($x, 'json'), $x);
