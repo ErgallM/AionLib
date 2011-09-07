@@ -322,7 +322,10 @@ class RuAionDatabase
 
         $p = new \Zend_Dom_Query();
         $url = str_replace('{id}', $id, $this->_itemUrl);
-        $p->setDocumentHtml(file_get_contents($url));
+        @$file = file_get_contents($url);
+        if (!$file) return array();
+
+        $p->setDocumentHtml($file);
 
         // get full Image
         $r = $p->query('.infobox-table .map_tooltip_border img');
