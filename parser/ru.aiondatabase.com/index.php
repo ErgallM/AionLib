@@ -24,33 +24,64 @@ class RuAionDatabase
     const RACE_ELI_NAME = 'элийцев';
 
     protected $_items = array();
-    protected $_itemsType = array();
+
+    protected $_itemsType = array(
+        'Кожаные доспехи'       => 1,
+        'Кольчужные доспехи'    => 1,
+        'Латные доспехи'        => 1,
+        'Тканые доспехи'        => 1,
+        'Щиты'                  => 1,
+        'Серьги'                => 1,
+        'Ожерелья'              => 1,
+        'Кольца'                => 1,
+        'Пояса'                 => 1,
+        'Головной убор'         => 1,
+        'Стрелы'                => 1,
+    );
+
     protected $_skills = array(
-        'Атака'             => 0,
-        'Скор. атаки'       => 1,
-        'Точность'          => 2,
-        'Ф. крит.'          => 3,
-        'Парир.'            => 4,
-        'Точн. магии'       => 5,
-        'Макс. HP'          => 6,
-        'Физическая атака'  => 7,
-        'Парир.'            => 8,
-        'Макс. MP'          => 9,
-        'Блок щитом'        => 10,
-        'Сила магии'        => 11,
-        'М. крит.'          => 12,
-        'Скор. магии'       => 13,
-        'Маг. атака'        => 14,
-        'Уклонение'         => 15,
-        'Физ. защита'       => 16,
-        'Маг. защита'       => 17,
-        'Концентрац.'       => 18,
-        'Скор. полета'      => 19,
-        'Время полета'      => 20,
-        
-        'Агрессия'          => 21,
-        'Скор. движ.'       => 22,
-        'ЛВК'               => 23,
+        'Атака'             => 1,
+        'Физическая атака'  => 2,
+        'Маг. атака'        => 3,
+        'Скор. атаки'       => 4,
+        'Скор. магии'       => 5,
+        'Точность'          => 6,
+        'Точн. магии'       => 7,
+        'Ф. крит.'          => 8,
+        'М. крит.'          => 9,
+        'Сила магии'        => 10,
+        'Сила исцелен.'     => 11,
+
+        'Парир.'            => 12,
+        'Уклонение'         => 13,
+        'Концентрац.'       => 14,
+        'Блок урона'        => 15,
+        'Блок щитом'        => 16,
+        'Блок ф. крит.'     => 17,
+        'Блок м. крит.'     => 18,
+
+        'Физ. защита'       => 19,
+        'Маг. защита'       => 20,
+        'Защ. от земли'     => 21,
+        'Защ. от возд.'     => 22,
+        'Защ. от воды'      => 23,
+        'Защ. от огня'      => 24,
+        'Защита от ф. крит.' => 25,
+
+        'Сопротивление оглушению'   => 26,
+        'Сопротивление опрокидыванию' => 27,
+        'Сопротивление отталкиванию' => 28,
+
+        'Макс. HP'          => 29,
+        'Макс. MP'          => 30,
+
+        'Скор. полета'      => 31,
+        'Время полета'      => 32,
+        'Скор. движ.'       => 33,
+
+        'Агрессия'          => 34,
+
+        'ЛВК'               => 35,
     );
 
     protected $_slots = array();
@@ -79,6 +110,7 @@ class RuAionDatabase
         } elseif ('json' == $type) {
             $url = str_replace('{id}', $id, $this->_itemUrlJson);
             @$file = file_get_contents($url);
+            if (!$file) $file = '';
 
             if (false !== $pos = strpos($file, "content:'")) {
                 $file = substr($file, $pos + strlen("content:'"), strpos($file, "', icon") - strlen("', icon") - $pos - 2);
@@ -283,7 +315,7 @@ class RuAionDatabase
                 return null;
             }
 
-            $item['dopinfo'] .= $key . PHP_EOL;
+            $item['dopinfo'] .= (!empty($item['dopinfo'])) ? PHP_EOL . $key : $key;
 
             if (!isset($this->_noFoundKey[$blocksId . ':' . $key])) {
                 $this->_noFoundKey[$blocksId . ':' . $key] = $itemId;
@@ -459,7 +491,7 @@ if ($argc > 1) {
 $parser = new RuAionDatabase();
 $i = 0;
 
-$x = 100000000;
+$x = 100600930;
 
 //var_dump($parser->parser($parser->getPageContent($x, 'json'), $x));
 //$parser->parserHtml($x);
@@ -467,24 +499,9 @@ $x = 100000000;
 //var_dump($parser->getStatus());
 
 /*
-$items = $parser->parserXml();
-$all = sizeof($items);
-foreach($items as $itemName => $ids) {
-    if (sizeof($ids) > 1) {
-        echo $itemName . ' - ' . var_export($ids);
-    }
-
-    $i++;
-    $x = array_shift($ids);
-    
-    $parser->parser($parser->getPageContent($x, 'json'), $x);
-    echo "$all/$i - $x\n";
-}
-*/
-
 $options = array(
-    'start' => 100000000,
-    'end'   => 200000000
+    'start' => 1,
+    'end'   => 1000000
 );
 
 if ($argc > 1) {
@@ -498,22 +515,31 @@ if ($argc > 1) {
     }
 }
 
-$all = $options['end'] - $options['start'];
-for ($x = $options['start']; $x <= $options['end']; $x++) {
-    $i++;
 
-    $item = $parser->parser($parser->getPageContent($x, 'json'), $x);
-    if (null === $item) {
-        echo "$all/$i - $x - null\n";
-    } else {
-        echo "$all/$i - $x\n";
+$items = $parser->parserXml();
+$all = sizeof($items);
+foreach($items as $itemName => $ids) {
+    if (sizeof($ids) > 1) {
+        echo $itemName . ' - ' . var_export($ids);
     }
+
+    $i++;
+    $x = array_shift($ids);
+    
+    if ($i < $options['start']) continue;
+    if ($i > $options['end']) break;
+
+    $parser->parser($parser->getPageContent($x, 'json'), $x);
+    echo "$all/$i - $x\n";
 }
 
-file_put_contents('status.txt', $parser->getStatus());
-file_put_contents('options.php', "<?php return " . serialize($parser->getOptions()));
-file_put_contents('db.php', "<?php return " . serialize($parser->getItems()));
-file_put_contents('images.txt', $parser->getImagesAsString());
+$f = $options['start'] . '-' . $options['end'];
 
+
+file_put_contents("status-$f.txt", $parser->getStatus());
+file_put_contents("options-$f.php", "<?php return unserialize('" . serialize($parser->getOptions()) . "');");
+file_put_contents("db-$f.php", "<?php return unserialize('" . serialize($parser->getItems()). "');");
+file_put_contents("images-$f.txt", $parser->getImagesAsString());
+*/
 
 echo '100%' . PHP_EOL;
