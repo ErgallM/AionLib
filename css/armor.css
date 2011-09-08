@@ -1,0 +1,50 @@
+.header {
+    margin-top: 20px;
+    margin-left: 40px;
+}
+.header img {
+    float: left;
+    margin-right: 20px;
+}
+.header h3 {
+    color: #969594;
+}
+
+.item {
+    width: 60px;
+    float: left;
+    height: 60px;
+    border: 1px solid black;
+    border-radius: 3px;
+}
+
+.item-line-1-block {
+    float: left;
+    width: 102px;
+}
+
+.item-line-1-block.c {
+    margin-left: 20px;
+    margin-right: 30px;
+    width: 50px;
+}
+
+.item-line-1-block>a {
+    display: block;
+    clear: left;
+    float: left;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+}
+
+.item-line-1-block .child {
+    margin-top: -20px;
+}
+
+.item-line-1-block.r>a{
+    clear: none;
+}
+.item-line-1-block.r .parend {
+    margin-left: 40px;
+}

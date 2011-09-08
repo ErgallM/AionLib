@@ -140,6 +140,11 @@ class Items
         return $this;
     }
 
+    public function getClearText($value)
+    {
+        return htmlentities($value, ENT_QUOTES);
+    }
+
     public function parserHtml($itemId)
     {
         $url = str_replace('{id}', $itemId, $this->_itemUrl);
@@ -173,7 +178,7 @@ class Items
         $td = $table->getElementsByTagName('td');
         $blocks = array();
         foreach ($td as $t) {
-            $blocks[] = trim(str_replace(':', '', $t->textContent));
+            $blocks[] = $this->getClearText(trim(str_replace(':', '', $t->textContent)));
         }
         while ($key = array_shift($blocks)) {
             $value = array_shift($blocks);
@@ -234,14 +239,15 @@ class Items
         );
 
         $options['smallimage'] = '/res/icons/40/' . $json['i'] . '.png';
-        $options['q'] = $json['q'];
+        $options['q'] = $this->getClearText($json['q']);
 
         foreach ($json['fields'] as $key => $value) {
+            $key = $this->getClearText($key);
             // атака
-            if (48 == $value) $options['pvp_atack'] = $json['values'][$key];
+            if (48 == $value) $options['pvp_atack'] = $this->getClearText($json['values'][$key]);
 
             // защита
-            if (49 == $value) $options['pvp_protect'] = $json['values'][$key];
+            if (49 == $value) $options['pvp_protect'] = $this->getClearText($json['values'][$key]);
         }
 
         return $options;
@@ -293,7 +299,7 @@ class Items
                     continue;
                 }
 
-                $v = trim($td->textContent, " ");
+                $v = $this->getClearText(trim($td->textContent, " "));
                 if (!empty($v)) $blocks[] = $v;
             }
         }
@@ -543,21 +549,34 @@ class Items
     }
 }
 
-$options = \Cli::getParams(array('start' => 0, 'end' => 40000), $argc, $argv);
+$options = \Cli::getParams(array('start' => 0, 'end' => 0, 'type'=> 'db'), $argc, $argv);
 
 $parser = new \Parser\Items();
-$config = new \Yap\Config\Xml('itemlist.xml');
-$i = 0;
 
-echo "======START======\n";
-foreach ($config as $id) {
-    $i++;
-    if ($i < $options['start'] || $i > $options['end']) continue;
+if ('db' == $options['type']) {
+    if (!$options['end']) $options['end'] = 40000;
 
-    $x = (int) array_shift($id);
-    $parser->parser($x);
+    $config = new \Yap\Config\Xml('itemlist.xml');
+    $i = 0;
 
-    echo ($options['end'] - $i) . ' / ' . $i . ' / ' . $options['end'] . ' - ' . $x . PHP_EOL;
+    echo "======START======\n";
+    foreach ($config as $id) {
+        $i++;
+        if ($i < $options['start'] || $i > $options['end']) continue;
+
+        $x = (int) array_shift($id);
+        $parser->parser($x);
+
+        echo ($options['end'] - $i) . ' / ' . $i . ' / ' . $options['end'] . ' - ' . $x . PHP_EOL;
+    }
+} elseif ('items' == $options['type']) {
+    if (!$options['end']) $options['end'] = $options['start'];
+
+    echo "======START======\n";
+    for ($x = $options['start']; $x <= $options['end']; $x++) {
+        $parser->parser($x);
+        echo $x . PHP_EOL;
+    }
 }
 
 file_put_contents("db/items-{$options['start']}-{$options['end']}.php", "<?php return unserialize('" . serialize($parser->getItems()) . "');");

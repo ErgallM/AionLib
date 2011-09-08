@@ -1,4 +1,4 @@
 .idea
 *.log
 *.bak
-tests/report
+parser/ru.aiondatabase.com/db
