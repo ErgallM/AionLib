@@ -564,4 +564,4 @@ file_put_contents("db/items-{$options['start']}-{$options['end']}.php", "<?php r
 file_put_contents("db/images-{$options['start']}-{$options['end']}.php", "<?php return unserialize('" . serialize($parser->getImages()) . "');");
 file_put_contents("db/status-{$options['start']}-{$options['end']}.txt", var_export($parser->getStatus(), true));
 echo "======END======\n";
-echo 'Parser ' . sizeof($parser->getItems()) . ' in ' . $all . PHP_EOL;
+echo 'Parser ' . sizeof($parser->getItems()) . ' in ' . ($options['end'] - $options['start']) . PHP_EOL;
