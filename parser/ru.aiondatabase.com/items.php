@@ -548,9 +548,8 @@ $options = \Cli::getParams(array('start' => 0, 'end' => 40000), $argc, $argv);
 $parser = new \Parser\Items();
 $config = new \Yap\Config\Xml('itemlist.xml');
 $i = 0;
-$all = sizeof($config->toArray());
-echo "======START======\n";
 
+echo "======START======\n";
 foreach ($config as $id) {
     $i++;
     if ($i < $options['start'] || $i > $options['end']) continue;
@@ -558,7 +557,7 @@ foreach ($config as $id) {
     $x = (int) array_shift($id);
     $parser->parser($x);
 
-    echo $i . ' / ' . ($all - $i) . ' / ' . $all . ' - ' . $x . PHP_EOL;
+    echo ($options['end'] - $i) . ' / ' . $i . ' / ' . $options['end'] . ' - ' . $x . PHP_EOL;
 }
 
 file_put_contents("db/items-{$options['start']}-{$options['end']}.php", "<?php return unserialize('" . serialize($parser->getItems()) . "');");
