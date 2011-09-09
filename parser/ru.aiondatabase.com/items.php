@@ -312,16 +312,19 @@ class Items
 
         $item = array(
             'name'          => array_shift($blocks),
-            'skills'        => '',
             'type'          => 0,
             'for'           => 0,
-            'info'          => '',
-            'dopinfo'       => '',
             'lvl'           => 0,
+
+            'skills'        => '',
+
             'stoun'         => '',
-            'magicstoun'    => '',
+            'magicstoun'    => 0,
             'longatack'     => 0,
             'complect'      => '',
+
+            'info'          => '',
+            'dopinfo'       => '',
         );
 
         if (0 === strpos($item['name'], 'Рецепт:')) {

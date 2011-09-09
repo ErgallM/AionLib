@@ -328,3 +328,19 @@ var Ap = new Class({
         $(that.options.groupNowApId).set('html', html);
     }
 });
+
+var Armor = new Class({
+    Implements: [Options],
+    options: {
+    },
+
+    // Показать панель
+    showPanel: function(panelType) {},
+
+    // Обновить статусы
+    resetStatus: function() {},
+
+    // Обмен оружия
+    exchangeWeapon: function() {}
+
+});
