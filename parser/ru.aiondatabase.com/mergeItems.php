@@ -61,6 +61,16 @@ class MergeItems
         }
     }
 
+    public static function saveImagesToFile()
+    {
+        $images = '';
+        foreach (self::$_images as $image) {
+            $images .= "$image\n";
+        }
+        file_put_contents("db/images.txt", $images);
+        system("wget -c --limit-rate=50k -i db/images.txt -P db/images");
+    }
+
     public static function saveToSql($oneInsertRecordCount = 1000)
     {
         $handle = 'INSERT INTO `aion`.`items` (`aion_id`, `name`, `type`, `lvl`, `slot`, `q`, `skills`, `pvp_atack`, `pvp_protect`, `ap_price`, `stoun`, `magicstoun`, `longatack`, `complect`, `info`, `dopinfo`, `smallimage`, `image`) VALUES ';
@@ -145,6 +155,7 @@ MergeItems::mergeItems();
 file_put_contents("db/items-all.php", "<?php return unserialize('" . serialize(MergeItems::$_items) . "');");
 file_put_contents("db/items-images.php", "<?php return unserialize('" . serialize(MergeItems::$_images) . "');");
 MergeItems::saveToSql();
+MergeItems::saveImagesToFile();
 echo "======END======\n";
 echo 'items: ' . sizeof(MergeItems::$_items) . PHP_EOL . 'images: ' . sizeof(MergeItems::$_images) . PHP_EOL;
 echo 'Errors: ' . MergeItems::getErrors() . PHP_EOL;

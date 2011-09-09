@@ -329,18 +329,227 @@ var Ap = new Class({
     }
 });
 
+var ArmorItems = new Class({
+    Implements: [Options],
+    options: {
+        urls: {
+            items: '/armor.php'
+        },
+        
+        spy: null,
+        start: 0,
+        request: null,
+
+        filterLoading: null,
+
+        items: {},
+
+        searchName: ''
+    },
+
+    initRequest: function() {
+        var that = this;
+
+        var loading = this.options.filterLoading;
+
+        var request = new Request.JSON({
+            url: that.options.urls.items,
+            method: 'get',
+            link: 'cancel',
+            noCache: true,
+            onRequest: function() {
+                loading.removeClass('hide');
+            },
+            onSuccess: function(responseJSON) {
+                loading.addClass('hide');
+
+                 that.options.start += 100;
+                 that.displayItemList(responseJSON);
+
+                 that.spyAct();
+            },
+            onFailure: function() {
+                //reset the message
+                loading.addClass('hide');
+            },
+            onComplete: function() {
+                //remove the spinner
+                loading.addClass('hide');
+            },
+            onError: function() {
+                loading.addClass('hide');
+            }
+        });
+        this.options.request = request;
+    },
+
+    spyAct: function() {
+        var spyContainer = this.options.itemsList;
+        var filter = this.options.filter;
+
+        var min = spyContainer.getScrollSize().y - spyContainer.getSize().y - 300;
+
+        this.spy = new ScrollSpy({
+            container: spyContainer,
+            min: min,
+            onEnter: function() {
+                filter.fireEvent('submit');
+            }
+        })
+    },
+
+    displayItemList: function(postsJSON) {
+        var that = this;
+        postsJSON.each(function(post, i) {
+            that.options.items[post['id']] = post;
+            
+            var postDiv = new Element('div', {
+                'class': 'post',
+                'events': {
+                    click: function() {
+                        console.log(this.id);
+                    }
+                },
+                id: 'post-' + post['id'],
+                html: '<img src="' + post['smallimage'] + '" /> <span>' + post['name'] + '</span>'
+            });
+            postDiv.inject(that.options.itemsList);
+        });
+    },
+
+    initFilter: function() {
+        var filter = this.options.filter;
+        var that = this;
+        filter.addEvent('submit', function(e) {
+            var e = new Event(e);
+            e.stop();
+            e.stopPropagation();
+
+            var name = this.serialize(true)['name'];
+            if (name != that.options.searchName) {
+                that.options.itemsList.set('html', '');
+                that.options.start = 0;
+                that.options.searchName = name;
+            }
+
+            that.options.request.send({
+                data: {
+                    'start': that.options.start,
+                    'name': name
+                }
+            });
+            return false;
+        });
+    },
+
+    initialize: function (options) {
+        this.setOptions(options);
+
+        this.initRequest();
+        this.initFilter();
+    }
+});
+
 var Armor = new Class({
     Implements: [Options],
     options: {
+        types: {
+            itemsType: {
+                '1': 'Тканые доспехи',
+                '2': 'Кожаные доспехи',
+                '3': 'Кольчужные доспехи',
+                '4': 'Латные доспехи',
+                '5': 'Щиты',
+                '6': 'Головной убор',
+
+                '7': 'Копья',
+                '8': 'Двуручные мечи',
+                '9': 'Мечи',
+                '10':'Кинжалы',
+                '11':'Булавы',
+                '12':'Посохи',
+                '13':'Луки',
+                '14':'Орбы',
+                '15':'Гримуары',
+
+                '16':'Серьги',
+                '17':'Ожерелья',
+                '18':'Кольца',
+                '19':'Пояса'
+            },
+            skills: {
+                '1': 'Атака',
+                '2': 'Физическая атака',
+                '3': 'Маг. атака',
+                '4': 'Скор. атаки',
+                '5': 'Скор. магии',
+                '6': 'Точность',
+                '7': 'Точн. магии',
+                '8': 'Ф. крит.',
+                '9': 'М. крит.',
+                '10':'Сила магии',
+                '11':'Сила исцелен.',
+
+                '12':'Парир.',
+                '13':'Уклонение',
+                '14':'Концентрац.',
+                '15':'Блок урона',
+                '16':'Блок щитом',
+                '17':'Блок ф. крит.',
+                '18':'Блок м. крит.',
+
+                '19':'Физ. защита',
+                '20':'Маг. защита',
+                '21':'Защ. от земли',
+                '22':'Защ. от возд.',
+                '23':'Защ. от воды',
+                '24':'Защ. от огня',
+                '25':'Защита от ф. крит.',
+
+                '26':'Сопротивление оглушению',
+                '27':'Сопротивление опрокидыванию',
+                '28':'Сопротивление отталкиванию',
+
+                '29':'Макс. HP',
+                '30':'Макс. MP',
+
+                '31':'Скор. полета',
+                '32':'Время полета',
+                '33':'Скор. движ.',
+
+                '34':'Агрессия',
+
+                '35':'ЛВК'
+            },
+            slots: {
+                '1': 'Голова',
+                '2': 'Торс',
+                '3': 'Штаны',
+                '4': 'Ботинки',
+                '5': 'Наплечники',
+                '6': 'Перчатки',
+
+                '7': 'Ожерелья',
+                '8': 'Серьги',
+                '9': 'Кольца',
+                '10':'Пояс',
+
+                '11':'Крыло',
+
+                '12':'Главная или Вторая Рука',
+                '13':'Главная Рука'
+            }
+        }
     },
 
-    // Показать панель
-    showPanel: function(panelType) {},
+    armorItems: null,
 
-    // Обновить статусы
-    resetStatus: function() {},
+    initialize: function (options) {
+        this.setOptions(options);
 
-    // Обмен оружия
-    exchangeWeapon: function() {}
+        if (options.items) {
+            this.armorItems = new ArmorItems(options.items);
+        }
+    }
 
 });

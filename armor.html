@@ -18,7 +18,10 @@
     <script language="javascript" src="/js/mootools-core-1.3.2-full-nocompat-yc.js"></script>
     <script language="javascript" src="/js/Element.serialize.js"></script>
 
+    <script language="javascript" src="/js/ScrollSpy-yui-compressed.js"></script>
+
     <script language="javascript" src="/js/main.js"></script>
+
 </head>
 <body>
 <div class="header">
@@ -89,11 +92,40 @@
             <label>Титул: <select><option>Титул</option></select></label>
         </div>
     </div>
-
-    <div id="man-info">
-        
+</div>
+    <div id="man-info" class="span-10">
+        <div>
+            <form id="filter">
+                <label>Название <input type="text" name="name" id="filter-name" /></label>
+                <input type="submit" value="Применить" />
+                <span id="loadFilter" class="hide"><img src="/images/ajax-loader.gif" /></span>
+            </form>
+        </div>
+        <hr class="space" />
+        <!--
+        <div class="select-items">
+            <div id="select-items">
+                <li>
+                    <img src="/parser/ru.aiondatabase.com/images/icon_item_bow_e01.png" alt="">
+                    <span>Меч равнодушия в упаковке</span>
+                </li>
+            </ul>
+        </div> -->
+        <div id="posts-container">
+             <div id="posts"></div>
+        </div>
     </div>
 
-</div>
+<script language="javascript">
+    window.addEvent('domready', function() {
+        var armor = new Armor({
+            items: {
+                itemsList: $('posts'),
+                filter: $('filter'),
+                filterLoading: $('loadFilter')
+            }
+        });
+    });
+</script>
 </body>
 </html>
