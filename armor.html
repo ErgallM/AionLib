@@ -41,16 +41,16 @@
             <div class="item-line-1-block">
                 <div class="item">&nbsp;</div>
                 <a href="#">a</a>
-                <div class="item child">&nbsp;</div>
+                <div class="item child" slot="13">Главная Рука</div>
             </div>
 
             <div class="item-line-1-block c">
-                <div class="item">&nbsp;</div>
+                <div class="item" slot="11">Крыло</div>
             </div>
 
             <div class="item-line-1-block r">
                 <div class="item parend">&nbsp;</div>
-                <div class="item child">&nbsp;</div>
+                <div class="item child" slot="12">Главная или Вторая Рука</div>
                 <a href="#">a</a>
             </div>
 
@@ -60,29 +60,33 @@
         <hr class="space" />
 
         <div class="span-2">
-            <div class="item">&nbsp;</div>
+            <div class="item" slot="1">Голова</div>
             <hr class="space" />
-            <div class="item">&nbsp;</div>
+            <div class="item" slot="8">Серьги</div>
             <hr class="space" />
-            <div class="item">&nbsp;</div>
+            <div class="item" slot="2">Торс</div>
             <hr class="space" />
-            <div class="item">&nbsp;</div>
+            <div class="item" slot="3">Штаны</div>
             <hr class="space" />
-            <div class="item">&nbsp;</div>
+            <div class="item" slot="9">Кольца</div>
+            <hr class="space" />
+            <div class="item" slot="4">Ботинки</div>
         </div>
         <div class="span-4">
             Image
         </div>
         <div class="span-2">
-            <div class="item">&nbsp;</div>
+            <div class="item" slot="7">Ожерелья</div>
             <hr class="space" />
-            <div class="item">&nbsp;</div>
+            <div class="item" slot="8">Серьги</div>
             <hr class="space" />
-            <div class="item">&nbsp;</div>
+            <div class="item" slot="5">Наплечники</div>
             <hr class="space" />
-            <div class="item">&nbsp;</div>
+            <div class="item" slot="6">Перчатки</div>
             <hr class="space" />
-            <div class="item">&nbsp;</div>
+            <div class="item" slot="9">Кольца</div>
+            <hr class="space" />
+            <div class="item" slot="10">Пояс</div>
         </div>
 
         <div class="clear"></div>
@@ -125,6 +129,9 @@
                 filterLoading: $('loadFilter')
             }
         });
+
+        var man= new Man({});
+        man.initSelectItem();
     });
 </script>
 </body>

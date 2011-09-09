@@ -450,6 +450,27 @@ var ArmorItems = new Class({
     }
 });
 
+var Man = new Class({
+    Implements: [Options],
+    options: {
+        man: $('man'),
+        selectItem: null
+    },
+
+    initSelectItem: function() {
+        var that = this;
+        $$('.item').each(function(item) {
+            if (item.hasAttribute('slot')) {
+                var slot = item.get('slot');
+                item.addEvent('click', function() {
+                    that.options.selectItem = this;
+                });
+            }
+        });
+    }
+
+});
+
 var Armor = new Class({
     Implements: [Options],
     options: {
