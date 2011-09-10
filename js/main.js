@@ -346,6 +346,7 @@ var ArmorItems = new Class({
 
         searchName: ''
     },
+    armor: {},
 
     initRequest: function() {
         var that = this;
@@ -407,7 +408,7 @@ var ArmorItems = new Class({
                 'class': 'post',
                 'events': {
                     click: function() {
-                        console.log(this.id);
+                        that.armor.man.setItem(post);
                     }
                 },
                 id: 'post-' + post['id'],
@@ -454,8 +455,10 @@ var Man = new Class({
     Implements: [Options],
     options: {
         man: $('man'),
-        selectItem: null
+        selectItem: null,
+        items: {}
     },
+    armor: {},
 
     initSelectItem: function() {
         var that = this;
@@ -463,10 +466,35 @@ var Man = new Class({
             if (item.hasAttribute('slot')) {
                 var slot = item.get('slot');
                 item.addEvent('click', function() {
+                    $$('.item').removeClass('selectedItem');
+                    this.addClass('selectedItem');
                     that.options.selectItem = this;
                 });
             }
         });
+    },
+
+    initialize: function (options) {
+        this.setOptions(options);
+        this.initSelectItem();
+    },
+
+    setItem: function(item) {
+        var slot = item.slot;
+        var that = this;
+
+        this.options.items[slot] = item;
+        var img = new Element('img', {
+            src: item['smallimage']
+        });
+
+        var div;
+
+        //1 Вставка по выбраному полю
+        div = this.options.selectItem;
+
+        if (div) img.inject(div.empty());
+
     }
 
 });
@@ -564,12 +592,19 @@ var Armor = new Class({
     },
 
     armorItems: null,
+    man: null,
 
     initialize: function (options) {
         this.setOptions(options);
 
         if (options.items) {
             this.armorItems = new ArmorItems(options.items);
+            this.armorItems.armor = this;
+        }
+
+        if (options.man) {
+            this.man = new Man(options.man);
+            this.man.armor = this;
         }
     }
 

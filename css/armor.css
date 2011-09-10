@@ -17,6 +17,9 @@
     border: 1px solid black;
     border-radius: 3px;
 }
+.item.selectedItem {
+    border-width: 2px;
+}
 
 .item-line-1-block {
     float: left;
