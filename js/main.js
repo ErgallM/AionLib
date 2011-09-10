@@ -344,7 +344,8 @@ var ArmorItems = new Class({
 
         items: {},
 
-        searchName: ''
+        searchName: '',
+        formValues: null
     },
     armor: {},
 
@@ -426,17 +427,17 @@ var ArmorItems = new Class({
             e.stop();
             e.stopPropagation();
 
-            var name = this.serialize(true)['name'];
-            if (name != that.options.searchName) {
+            var data = this.serialize(true);
+            if (Object.toQueryString(data) != Object.toQueryString(that.options.formValues)) {
                 that.options.itemsList.set('html', '');
                 that.options.start = 0;
-                that.options.searchName = name;
+                that.options.formValues = data;
             }
 
             that.options.request.send({
                 data: {
                     'start': that.options.start,
-                    'name': name
+                    'data': that.options.formValues
                 }
             });
             return false;
@@ -455,8 +456,12 @@ var Man = new Class({
     Implements: [Options],
     options: {
         man: $('man'),
+        status: $('status'),
         selectItem: null,
-        items: {}
+        items: {},
+
+        filterType: null,
+        filterSlot: null
     },
     armor: {},
 
@@ -467,6 +472,8 @@ var Man = new Class({
                 $$('.item').removeClass('selectedItem');
                 this.addClass('selectedItem');
                 that.options.selectItem = this;
+                that.options.filterSlot.set('value', this.get('slot'));
+                
             });
         });
     },
@@ -544,7 +551,48 @@ var Man = new Class({
         if (div) {
             this.options.items[div.get('id')] = item;
             img.inject(div.empty());
+            this.updateStatus();
         }
+    },
+
+    updateStatus: function() {
+        var that = this;
+        var status = {};
+
+        function calcSkill(name, value) {
+            if ('Атака' == name) {
+                status[name] = value;
+            } else {
+                value = Number.from(value);
+                status[name] = (!status[name]) ? value : status[name] + value;
+            }
+        }
+
+        Object.each(this.options.items, function(item) {
+            if (!item || !item.skills) return;
+            
+            if (item.skills.main) {
+                Object.each(item.skills.main, function(skill, skillName) {
+                    calcSkill(skillName, skill);
+                });
+            }
+
+            if (item.skills.other) {
+                Object.each(item.skills.other, function(skill, skillName) {
+                    calcSkill(skillName, skill);
+                });
+            }
+
+            //pvp
+            if (item.pvp_atack) calcSkill('PvP урон', item.pvp_atack);
+            if (item.pvp_protect) calcSkill('PvP защита', item.pvp_protect);
+        });
+
+        var statusText = '';
+        Object.each(status, function(value, name) {
+            statusText += '<div>' + name + ' = ' + value + '</div>';
+        })
+        that.options.status.set('html', statusText);
     }
 
 });

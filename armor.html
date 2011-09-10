@@ -100,25 +100,22 @@
     <div id="man-info" class="span-10">
         <div>
             <form id="filter">
+                <input type="hidden" id="filter-slot" name="slot" value="0" />
+                <input type="hidden" id="filter-type" name="type" value="0" />
                 <label>Название <input type="text" name="name" id="filter-name" /></label>
                 <input type="submit" value="Применить" />
                 <span id="loadFilter" class="hide"><img src="/images/ajax-loader.gif" /></span>
             </form>
         </div>
         <hr class="space" />
-        <!--
-        <div class="select-items">
-            <div id="select-items">
-                <li>
-                    <img src="/parser/ru.aiondatabase.com/images/icon_item_bow_e01.png" alt="">
-                    <span>Меч равнодушия в упаковке</span>
-                </li>
-            </ul>
-        </div> -->
         <div id="posts-container">
              <div id="posts"></div>
         </div>
     </div>
+
+<div id="status">
+
+</div>
 
 <script language="javascript">
     window.addEvent('domready', function() {
@@ -128,7 +125,11 @@
                 filter: $('filter'),
                 filterLoading: $('loadFilter')
             },
-            man: {}
+            man: {
+                status: $('status'),
+                filterSlot: $('filter-slot'),
+                filterType: $('filter-type')
+            }
         });
     });
 </script>

@@ -24,16 +24,48 @@ function ser($value) {
     return (!empty($value)) ? unserialize($value) : '';
 }
 
+function getValue($value) {
+    $value = htmlentities($value, ENT_QUOTES, 'utf-8');
+    $value = strip_tags($value);
+    return $value;
+}
 
-$number_of_posts = 100;
-if (isset($_GET['name']) && isset($_GET['start'])) {
+if (isset($_GET['data'])) {
     mysqlConnect();
-    echo get_items($_GET['name'], $_GET['start'], $number_of_posts);
+
+    $options = array(
+        'name' => (isset($_GET['data']['name'])) ? getValue($_GET['data']['name']) : '',
+        'start' => (isset($_GET['start'])) ? (int) $_GET['start'] : 0,
+        'slot' => (isset($_GET['data']['slot'])) ? (int) $_GET['data']['slot'] : null
+    );
+
+    echo get_items($options, 100);
     die();
 }
 
-function get_items($name, $start, $post) {
-    $sql = "SELECT * FROM `items` WHERE `name` LIKE '%$name%' AND slot > 0 ORDER BY q DESC, name LIMIT $start, $post";
+function get_items($options, $post) {
+    $start = $options['start'];
+
+    $name = $options['name'];
+    if (!empty($name)) {
+        $name = "`name` LIKE '%$name%'";
+    } else {
+        $name = "`name` != ''";
+    }
+
+
+    $slot = '';
+    if (!empty($options['slot'])) {
+        if (12 == $options['slot'] || 13 == $options['slot']) {
+            $slot = "AND (`slot` = 12 OR `slot` = 13)";
+        } else {
+            $slot = "AND `slot` = '{$options['slot']}'";
+        }
+    }
+
+    if (empty($slot)) $slot = 'AND slot > 0';
+
+    $sql = "SELECT * FROM `items` WHERE $name $slot ORDER BY q DESC, name LIMIT $start, $post";
 
     $result = mysql_query($sql);
 
