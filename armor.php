@@ -33,7 +33,7 @@ if (isset($_GET['name']) && isset($_GET['start'])) {
 }
 
 function get_items($name, $start, $post) {
-    $sql = "SELECT * FROM `items` WHERE `name` LIKE '%$name%' ORDER BY name LIMIT $start, $post";
+    $sql = "SELECT * FROM `items` WHERE `name` LIKE '%$name%' AND slot > 0 ORDER BY q DESC, name LIMIT $start, $post";
 
     $result = mysql_query($sql);
 

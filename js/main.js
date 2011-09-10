@@ -405,7 +405,7 @@ var ArmorItems = new Class({
             that.options.items[post['id']] = post;
             
             var postDiv = new Element('div', {
-                'class': 'post',
+                'class': 'post' + ((post['q']) ? ' q' + post['q'] : ''),
                 'events': {
                     click: function() {
                         that.armor.man.setItem(post);
@@ -463,14 +463,11 @@ var Man = new Class({
     initSelectItem: function() {
         var that = this;
         $$('.item').each(function(item) {
-            if (item.hasAttribute('slot')) {
-                var slot = item.get('slot');
-                item.addEvent('click', function() {
-                    $$('.item').removeClass('selectedItem');
-                    this.addClass('selectedItem');
-                    that.options.selectItem = this;
-                });
-            }
+            item.addEvent('click', function() {
+                $$('.item').removeClass('selectedItem');
+                this.addClass('selectedItem');
+                that.options.selectItem = this;
+            });
         });
     },
 
@@ -480,21 +477,74 @@ var Man = new Class({
     },
 
     setItem: function(item) {
-        var slot = item.slot;
         var that = this;
 
-        this.options.items[slot] = item;
         var img = new Element('img', {
-            src: item['smallimage']
+            'src': item.smallimage
         });
 
         var div;
+        switch (Number.from(item.type)) {
+            case 1: case 2: case 3: case 4: case 6: case 17: case 19:
+                div = $('item-' + item.slot);
+            break;
 
-        //1 Вставка по выбраному полю
-        div = this.options.selectItem;
+            case 7: case 8: case 12: case 13: case 14:  case 15:
+                this.options.items['item-12'] = null;
+                this.options.items['item-13'] = null;
+                $('item-12').empty(); $('item-13').empty();
+                img.clone().inject($('item-12'));
+                
+                div = $('item-13');
+            break;
+            case 5: case 9: case 10: case 11:
 
-        if (div) img.inject(div.empty());
+                if (this.options.items['item-13'] && [5, 9, 10, 11].indexOf(Number.from(this.options.items['item-13'].type)) == -1) {
+                    $('item-13').empty(); $('item-12').empty();
+                    this.options.items['item-13'] = null;
+                }
 
+                if (5 == item.type) {
+                    div = $('item-12');
+                } else {
+                    if (this.options.selectItem && [12, 13].indexOf(Number.from(this.options.selectItem.get('slot'))) != -1) {
+                        div = this.options.selectItem;
+                    } else {
+                        var isBrack = false;
+                        $$('#item-12, #item-13').each(function(el) {
+                            if (isBrack) return;
+                            if (!el.getElement('img')) {
+                                isBrack = true;
+                                div = el;
+                            }
+                        });
+                        if (!div) div = $('#item-12');
+                    }
+                }
+
+            break;
+
+            case 16: case 18:
+                if (this.options.selectItem && this.options.selectItem.get('slot') == item.slot) {
+                    div = this.options.selectItem;
+                } else {
+                    var isBrack = false;
+                    $$('#item-' + item.slot + '-1, #item-' + item.slot + '-2').each(function(el) {
+                        if (isBrack) return;
+                        if (!el.getElement('img')) {
+                            isBrack = true;
+                            div = el;
+                        }
+                    });
+                    if (!div) div = $$('[slot=' + item.slot + ']')[0];
+                }
+            break;
+        }
+
+        if (div) {
+            this.options.items[div.get('id')] = item;
+            img.inject(div.empty());
+        }
     }
 
 });
