@@ -36,11 +36,19 @@
 </div>
 <div class="content span-10 box">
     <div id="man">
+        <div>
+            <label>Класс: <select id="class">
+                <option value="1">Танк</option><option value="2">Гладиатор</option>
+                <option value="3">Целитель</option><option value="4">Чародей</option>
+                <option value="5">Стрелок</option><option value="6">Убийца</option>
+                <option value="7">Волшебник</option><option value="8">Заклинатель</option>
+            </select></label>
+        </div>
 
         <div class="item-line-1">
             <div class="item-line-1-block">
-                <div class="item">&nbsp;</div>
-                <a href="#">a</a>
+                <div class="item" id="item2-13">&nbsp;</div>
+                <a href="#" class="swapWeapon">a</a>
                 <div class="item child" slot="13" id="item-13">Главная Рука</div>
             </div>
 
@@ -49,9 +57,9 @@
             </div>
 
             <div class="item-line-1-block r">
-                <div class="item parend">&nbsp;</div>
+                <div class="item parend" id="item2-12">&nbsp;</div>
                 <div class="item child" slot="12" id="item-12">Главная или Вторая Рука</div>
-                <a href="#">a</a>
+                <a href="#" class="swapWeapon">a</a>
             </div>
 
             <div class="clear"></div>
@@ -97,25 +105,27 @@
         </div>
     </div>
 </div>
-    <div id="man-info" class="span-10">
-        <div>
-            <form id="filter">
-                <input type="hidden" id="filter-slot" name="slot" value="0" />
-                <input type="hidden" id="filter-type" name="type" value="0" />
-                <label>Название <input type="text" name="name" id="filter-name" /></label>
-                <input type="submit" value="Применить" />
-                <span id="loadFilter" class="hide"><img src="/images/ajax-loader.gif" /></span>
-            </form>
-        </div>
-        <hr class="space" />
-        <div id="posts-container">
-             <div id="posts"></div>
-        </div>
+<div id="add-items" class="span-10">
+    <div>
+        <form id="filter">
+            <input type="hidden" id="filter-slot" name="slot" value="0" />
+            <input type="hidden" id="filter-type" name="type" value="0" />
+            <label>Название <input type="text" name="name" id="filter-name" /></label>
+            <input type="submit" value="Применить" />
+            <span id="loadFilter" class="hide"><img src="/images/ajax-loader.gif" /></span>
+        </form>
     </div>
+    <hr class="space" />
+    <div id="posts-container">
+        <div id="posts"></div>
+    </div>
+</div>
 
 <div id="status">
 
 </div>
+
+
 
 <script language="javascript">
     window.addEvent('domready', function() {
@@ -128,7 +138,9 @@
             man: {
                 status: $('status'),
                 filterSlot: $('filter-slot'),
-                filterType: $('filter-type')
+                filterType: $('filter-type'),
+                filterName: $('filter-name'),
+                filterClass: $('class')
             }
         });
     });

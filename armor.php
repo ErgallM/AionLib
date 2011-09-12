@@ -1,4 +1,7 @@
 <?php
+if (false === strpos($_SERVER['HTTP_REFERER'], 'http://aionlib.local')) {
+    die('GOOD BY!');
+}
 function mysqlConnect()
 {
     $conn = mysql_connect("localhost", "root", "25459198");
@@ -36,7 +39,8 @@ if (isset($_GET['data'])) {
     $options = array(
         'name' => (isset($_GET['data']['name'])) ? getValue($_GET['data']['name']) : '',
         'start' => (isset($_GET['start'])) ? (int) $_GET['start'] : 0,
-        'slot' => (isset($_GET['data']['slot'])) ? (int) $_GET['data']['slot'] : null
+        'slot' => (!empty($_GET['data']['slot'])) ? (int) $_GET['data']['slot'] : null,
+        'type' => (!empty($_GET['data']['type'])) ? explode(',', $_GET['data']['type']) : null
     );
 
     echo get_items($options, 100);
@@ -65,7 +69,12 @@ function get_items($options, $post) {
 
     if (empty($slot)) $slot = 'AND slot > 0';
 
-    $sql = "SELECT * FROM `items` WHERE $name $slot ORDER BY q DESC, name LIMIT $start, $post";
+    $type = '';
+    if (isset($options['type']) && is_array($options['type']) && sizeof($options['type'])) {
+        $type = "AND `type` IN ('" . implode("', '", $options['type']) . "')";
+    }
+
+    $sql = "SELECT * FROM `items` WHERE $name $slot $type ORDER BY q DESC, name LIMIT $start, $post";
 
     $result = mysql_query($sql);
 

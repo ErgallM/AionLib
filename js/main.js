@@ -341,10 +341,10 @@ var ArmorItems = new Class({
         request: null,
 
         filterLoading: null,
+        filter: null,
 
         items: {},
-
-        searchName: '',
+        
         formValues: null
     },
     armor: {},
@@ -459,9 +459,12 @@ var Man = new Class({
         status: $('status'),
         selectItem: null,
         items: {},
+        items2: {},
 
         filterType: null,
-        filterSlot: null
+        filterSlot: null,
+        filterName: null,
+        filterClass: null
     },
     armor: {},
 
@@ -472,14 +475,157 @@ var Man = new Class({
                 $$('.item').removeClass('selectedItem');
                 this.addClass('selectedItem');
                 that.options.selectItem = this;
-                that.options.filterSlot.set('value', this.get('slot'));
-                
+
+                var slot = Number.from(this.get('slot'));
+                that.options.filterSlot.set('value', slot);
+
+                var class = Number.from(that.options.filterClass.get('value'));
+
+                that.options.filterType.set('value', '0');
+
+                // Танк
+                if (1 == class) {
+
+                    // Тело - Торс, Штаны, Ботинки, Наплечники, Перчатки
+                    if ([2, 3, 4, 5, 6].indexOf(slot) != -1) {
+                        // Ткань, Кожа, Кольчуга, Латы
+                        that.options.filterType.set('value', '1,2,3,4');
+                    }
+
+                    // Оружие
+                    if ([12, 13].indexOf(slot) != -1) {
+                        // Щиты, Двуручные мечи, Мечи, Булавы
+                        that.options.filterType.set('value', '5,8,9,11');
+                    }
+                }
+
+                // Гладиатор
+                if (2 == class) {
+                    // Тело - Торс, Штаны, Ботинки, Наплечники, Перчатки
+                    if ([2, 3, 4, 5, 6].indexOf(slot) != -1) {
+                        // Ткань, Кожа, Кольчуга, Латы
+                        that.options.filterType.set('value', '1,2,3,4');
+                    }
+
+                    // Оружие
+                    if ([12, 13].indexOf(slot) != -1) {
+                        // Щиты, Копья, Двуручные мечи, Мечи, Кинжалы, Булавы?, Луки,
+                        that.options.filterType.set('value', '5,7,8,9,10,11,13');
+                    }
+                }
+
+                // Целитель
+                if (3 == class) {
+                    // Тело - Торс, Штаны, Ботинки, Наплечники, Перчатки
+                    if ([2, 3, 4, 5, 6].indexOf(slot) != -1) {
+                        // Ткань, Кожа, Кольчуга
+                        that.options.filterType.set('value', '1,2,3');
+                    }
+
+                    // Оружие
+                    if ([12, 13].indexOf(slot) != -1) {
+                        // Щиты, Булавы, Посохи
+                        that.options.filterType.set('value', '5,11,12');
+                    }
+                }
+
+                // Чародей
+                if (4 == class) {
+                    // Тело - Торс, Штаны, Ботинки, Наплечники, Перчатки
+                    if ([2, 3, 4, 5, 6].indexOf(slot) != -1) {
+                        // Ткань, Кожа, Кольчуга
+                        that.options.filterType.set('value', '1,2,3');
+                    }
+
+                    // Оружие
+                    if ([12, 13].indexOf(slot) != -1) {
+                        // Щиты, Булавы, Посохи
+                        that.options.filterType.set('value', '5,11,12');
+                    }
+                }
+
+                // Стрелок
+                if (5 == class) {
+                    // Тело - Торс, Штаны, Ботинки, Наплечники, Перчатки
+                    if ([2, 3, 4, 5, 6].indexOf(slot) != -1) {
+                        // Ткань, Кожа
+                        that.options.filterType.set('value', '1,2');
+                    }
+
+                    // Оружие
+                    if ([12, 13].indexOf(slot) != -1) {
+                        // Мечи, Кинжалы, Луки
+                        that.options.filterType.set('value', '9,10,13');
+                    }
+                }
+
+                // Убийца
+                if (6 == class) {
+                    // Тело - Торс, Штаны, Ботинки, Наплечники, Перчатки
+                    if ([2, 3, 4, 5, 6].indexOf(slot) != -1) {
+                        // Ткань, Кожа
+                        that.options.filterType.set('value', '1,2');
+                    }
+
+                    // Оружие
+                    if ([12, 13].indexOf(slot) != -1) {
+                        // Мечи, Кинжалы, Луки
+                        that.options.filterType.set('value', '9,10,13');
+                    }
+                }
+
+                // Волшебник
+                if (7 == class) {
+                    // Тело - Торс, Штаны, Ботинки, Наплечники, Перчатки
+                    if ([2, 3, 4, 5, 6].indexOf(slot) != -1) {
+                        // Ткань
+                        that.options.filterType.set('value', '1');
+                    }
+
+                    // Оружие
+                    if ([12, 13].indexOf(slot) != -1) {
+                        // Орбы, Гримуары
+                        that.options.filterType.set('value', '14,15');
+                    }
+                }
+
+                // Заклинатель
+                if (8 == class) {
+                    // Тело - Торс, Штаны, Ботинки, Наплечники, Перчатки
+                    if ([2, 3, 4, 5, 6].indexOf(slot) != -1) {
+                        // Ткань
+                        that.options.filterType.set('value', '1');
+                    }
+
+                    // Оружие
+                    if ([12, 13].indexOf(slot) != -1) {
+                        // Орбы, Гримуары
+                        that.options.filterType.set('value', '14,15');
+                    }
+                }
+
+                that.options.filterName.set('value', '');
+                $('filter').fireEvent('submit');
+                $('add-items').tween('left', 0, 440);
+            });
+        });
+        this.options.filterClass.addEvent('change', function() {
+            $$('.item.selectedItem').fireEvent('click');
+        });
+
+        $$('.swapWeapon').each(function(a) {
+            a.addEvent('click', function() {
+                that.swapWeapon();
             });
         });
     },
 
     initialize: function (options) {
         this.setOptions(options);
+
+        var tween = $('add-items').get('tween');
+        tween.options.duration = 'short';
+
         this.initSelectItem();
     },
 
@@ -552,6 +698,7 @@ var Man = new Class({
             this.options.items[div.get('id')] = item;
             img.inject(div.empty());
             this.updateStatus();
+            $('add-items').tween('left', 450, 0);
         }
     },
 
@@ -563,7 +710,11 @@ var Man = new Class({
             if ('Атака' == name) {
                 status[name] = value;
             } else {
+                if (value.length > 2) {
+                    if ('+' == value[0] && '-' == value[1]) value = value.substr(1);
+                }
                 value = Number.from(value);
+
                 status[name] = (!status[name]) ? value : status[name] + value;
             }
         }
@@ -584,8 +735,8 @@ var Man = new Class({
             }
 
             //pvp
-            if (item.pvp_atack) calcSkill('PvP урон', item.pvp_atack);
-            if (item.pvp_protect) calcSkill('PvP защита', item.pvp_protect);
+            if (item.pvp_atack != 0) calcSkill('PvP урон', item.pvp_atack);
+            if (item.pvp_protect != 0) calcSkill('PvP защита', item.pvp_protect);
         });
 
         var statusText = '';
@@ -593,6 +744,30 @@ var Man = new Class({
             statusText += '<div>' + name + ' = ' + value + '</div>';
         })
         that.options.status.set('html', statusText);
+    },
+
+    swapWeapon: function() {
+        if (!this.options.items['item-12']) this.options.items['item-12'] = null;
+        if (!this.options.items['item-13']) this.options.items['item-13'] = null;
+        if (!this.options.items2['item-12']) this.options.items2['item-12'] = null;
+        if (!this.options.items2['item-13']) this.options.items2['item-13'] = null;
+
+        var item13 = this.options.items['item-13'];
+        var item12 = this.options.items['item-12'];
+        var item13html = $('item-13').get('html');
+        var item12html = $('item-12').get('html');
+
+        this.options.items['item-13'] = this.options.items2['item-13'];
+        this.options.items['item-12'] = this.options.items2['item-12'];
+        $('item-13').set('html', $('item2-13').get('html'));
+        $('item-12').set('html', $('item2-12').get('html'));
+
+        this.options.items2['item-13'] = item13;
+        this.options.items2['item-12'] = item12;
+        $('item2-13').set('html', item13html);
+        $('item2-12').set('html', item12html);
+
+        this.updateStatus();
     }
 
 });
