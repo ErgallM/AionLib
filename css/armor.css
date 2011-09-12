@@ -75,7 +75,7 @@
 
 #posts  { height:450px; overflow-y: auto; }
 
-#modal {
+.modal {
     position: absolute;
     padding: 35px 40px;
 

@@ -15,7 +15,7 @@
 
     <link rel="stylesheet" href="/css/armor.css" type="text/css" media="screen, projection">
 
-    <script language="javascript" src="/js/mootools-core-1.3.2-full-nocompat-yc.js"></script>
+    <script language="javascript" src="/js/mootools-core-1.4.0-full-nocompat-yc.js"></script>
     <script language="javascript" src="/js/Element.serialize.js"></script>
 
     <script language="javascript" src="/js/ScrollSpy-yui-compressed.js"></script>
@@ -125,7 +125,10 @@
 
 </div>
 
+<div id="ss">This is a message<p>new Message<b>b</b></p></div>
 
+<a href="javascript: void(0);" onclick="var m = new MessageBox({element: $('ss')}); m.show();">ss</a>
+<a href="javascript: void(0);" onclick="var m2 = new MessageBox({html: 'this is message<br /><p>ss<b>bb</b></p>'}); m2.show();">ss2</a>
 
 <script language="javascript">
     window.addEvent('domready', function() {

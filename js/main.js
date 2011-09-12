@@ -422,11 +422,7 @@ var ArmorItems = new Class({
     initFilter: function() {
         var filter = this.options.filter;
         var that = this;
-        filter.addEvent('submit', function(e) {
-            var e = new Event(e);
-            e.stop();
-            e.stopPropagation();
-
+        filter.addEvent('submit', function(event) {
             var data = this.serialize(true);
             if (Object.toQueryString(data) != Object.toQueryString(that.options.formValues)) {
                 that.options.itemsList.set('html', '');
@@ -881,4 +877,45 @@ var Armor = new Class({
         }
     }
 
+});
+
+var MessageBox = new Class({
+    Implements: [Options],
+    options: {
+        html: '',
+        element: null,
+        sp: null
+    },
+    message: null,
+
+    initialize: function (options) {
+        this.setOptions(options);
+        var that = this;
+
+        if (undefined == options.sp) {
+            var sp = new Element('div', {id: 'sp', class: 'hide', 'events':{'click':function() {that.hide();}}});
+            sp.inject($$('body')[0]);
+            this.options.sp = sp;
+        } else {
+            this.options.sp = sp;
+        }
+
+        var message = new Element('div', {
+            html: (null !== this.options.element) ? this.options.element.get('html') : this.options.html,
+            class:'modal hide'
+        }).inject($$('body')[0]);
+        this.message = message;
+    },
+    show: function() {
+        $$('body')[0].setStyle('overflow', 'hidden');
+        this.options.sp.removeClass('hide');
+
+        this.message.setStyle('left', Number.from($$('body')[0].getStyle('width')) / 2 - this.message.getSize().x / 2);
+        this.message.removeClass('hide');
+    },
+    hide: function() {
+        $$('body')[0].setStyle('overflow', 'auto');
+        this.options.sp.addClass('hide');
+        this.message.addClass('hide');
+    }
 });
