@@ -602,7 +602,7 @@ var Man = new Class({
 
                 that.options.filterName.set('value', '');
                 $('filter').fireEvent('submit');
-                $('add-items').tween('left', 0, 440);
+                $('add-items').tween('left', -150, 380);
             });
         });
         this.options.filterClass.addEvent('change', function() {
@@ -619,8 +619,7 @@ var Man = new Class({
     initialize: function (options) {
         this.setOptions(options);
 
-        var tween = $('add-items').get('tween');
-        tween.options.duration = 'short';
+        var tween = new Fx.Tween($('add-items'));
 
         this.initSelectItem();
     },
@@ -694,7 +693,7 @@ var Man = new Class({
             this.options.items[div.get('id')] = item;
             img.inject(div.empty());
             this.updateStatus();
-            $('add-items').tween('left', 450, 0);
+            $('add-items').tween('left', 380, -150);
         }
     },
 
