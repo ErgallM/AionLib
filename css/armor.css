@@ -140,10 +140,49 @@
 #add-items.active {
     left: 380px;
 }
+#add-items .close {
+    float: right;
+}
+#add-items .close button {
+    border: none;
+    background: url(/images/closeButtons.png) left top no-repeat;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+}
+#add-items .close button:hover {
+    background-position: -28px;
+}
 
 #posts  { height:400px; overflow-y: auto; }
 
 .content {
     position: relative;
     z-index: 10;
+}
+
+#compare {}
+#compare .block {margin-bottom: 20px;}
+#compare .type span {float: right;}
+#compare .skill {
+    float: left;
+    width: 150px;
+}
+/* меньше */
+#compare .skill.m span {
+    color: red;
+}
+/* больше */
+#compare .skill.b span {
+    color: #adff2f;
+}
+
+#compare .stoun {
+    float: left;
+    width: 150px;
+    height: 40px;
+    background: url(/images/manastonesocket.png) top left no-repeat;
+}
+#compare .complect-item {
+    margin-left: 20px;
 }

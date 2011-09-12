@@ -408,8 +408,14 @@ var ArmorItems = new Class({
             var postDiv = new Element('div', {
                 'class': 'post' + ((post['q']) ? ' q' + post['q'] : ''),
                 'events': {
-                    click: function() {
+                    click: function(e) {
                         that.armor.man.setItem(post);
+                    },
+                    // Правый клик (сравнение)
+                    contextmenu: function() {
+                        
+
+                        return false;
                     }
                 },
                 id: 'post-' + post['id'],
@@ -918,3 +924,21 @@ var MessageBox = new Class({
         this.message.addClass('hide');
     }
 });
+
+var ItemCompare = new Class({
+    Implements: [Options],
+    options: {
+
+    },
+    initialize: function(options) {
+        this.setOptions(options);
+    },
+    compare: function(item) {
+
+    },
+
+    // Инициализация диологового окна с вставкой камней
+    compareInsertStounInit: function(item) {
+        
+    }
+})
