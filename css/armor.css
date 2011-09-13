@@ -16,6 +16,7 @@
     height: 40px;
     border: 1px solid #222222;
     border-radius: 5px;
+    -moz-border-radius: 2px 2px 2px 2px;
     cursor: pointer;
 }
 .item.selectedItem {
@@ -98,15 +99,20 @@
     outline: 0 none;
     z-index: 1101;
 }
+.modal .buttons-panel {
+    text-align: center;
+    clear: both;
+}
 
 #sp {
     opacity: 0.75;
     width: 100%;
     height: 100%;
-    position: absolute;
+    position: fixed;
     color: #fff;
     background: #fff;
     z-index: 1000;
+    overflow: hidden;
     top: 0;
     left: 0;
 }
@@ -143,14 +149,21 @@
 #add-items .close {
     float: right;
 }
-#add-items .close button {
+
+button.close {
+    float: right;
+    margin-top: -15px;
+    margin-right: -20px;
+}
+
+#add-items .close button, button.close {
     border: none;
     background: url(/images/closeButtons.png) left top no-repeat;
     width: 14px;
     height: 14px;
     cursor: pointer;
 }
-#add-items .close button:hover {
+#add-items .close button:hover, button.close:hover {
     background-position: -28px;
 }
 
@@ -161,28 +174,101 @@
     z-index: 10;
 }
 
-#compare {}
-#compare .block {margin-bottom: 20px;}
-#compare .type span {float: right;}
-#compare .skill {
+.compare {}
+.compare .block {margin-bottom: 20px;}
+.compare .type span {float: right;}
+.compare .skill {
     float: left;
     width: 150px;
 }
 /* меньше */
-#compare .skill.m span {
+.compare .skill.m span {
     color: red;
 }
 /* больше */
-#compare .skill.b span {
+.compare .skill.b span {
     color: #adff2f;
 }
 
-#compare .stoun {
+.compare .stoun {
     float: left;
     width: 150px;
     height: 40px;
     background: url(/images/manastonesocket.png) top left no-repeat;
 }
-#compare .complect-item {
+.compare .complect-item {
     margin-left: 20px;
+}
+.compare h3 span {
+    display: block;
+    margin-top: 5px;
+}
+.compare .up {
+    background: url(/images/up.png) top left no-repeat;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    border: none;
+    white-space:nowrap;
+}
+.compare .down {
+    background: url(/images/down.png) top left no-repeat;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    border: none;
+    white-space:nowrap;
+}
+
+#container {
+    z-index: 1;
+}
+
+.gp-button {
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: transparent;
+    background-image: -webkit-gradient(linear, 0% 40%, 0% 70%, from(rgb(245, 245, 245)), to(rgb(241, 241, 241)));
+    background-origin: padding-box;
+    border-collapse: collapse;
+
+    border: #444 solid 1px;
+    border-radius: 2px;
+
+    -moz-border-radius: 2px 2px 2px 2px;
+    background: -moz-linear-gradient(center top , #F5F5F5, #F1F1F1) repeat scroll 0 0 transparent;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+
+    -o-transition-delay: 0, 0, 0, 0;
+    -o-transition-duration: 0.22s, 0.22s, 0.22s, 0.22s;
+    -o-transition-property: border-top-color, border-right-color, border-bottom-color, border-left-color;
+    -o-transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1), cubic-bezier(0.25, 0.1, 0.25, 1), cubic-bezier(0.25, 0.1, 0.25, 1), cubic-bezier(0.25, 0.1, 0.25, 1);
+    background-image: -o-linear-gradient(top, rgb(245, 245, 245) 40%, rgb(241, 241, 241) 70%);
+    
+    color: #666;
+    cursor: pointer;
+    display: inline-block;
+    font-family: arial, sans-serif;
+    font-size: 12px;
+
+    font-weight: bold;
+
+    padding: 7px 12px;
+
+    position: relative;
+    text-align: center;
+    text-transform: uppercase;
+    vertical-align: middle;
+    text-decoration: none;
+}
+.gp-button:hover {
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    color: #333;
+    border-color: #939393;
+}
+.gp-button:active {
+    background: -webkit-gradient(linear,0% 40%,0% 70%,from(#F1F1F1),to(whiteSmoke));
+    background: -moz-linear-gradient(center top , #F3F3F3, #F5F5F5) repeat scroll 0 0 transparent;
+    border-color: #444444;
 }

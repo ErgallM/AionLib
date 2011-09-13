@@ -413,7 +413,7 @@ var ArmorItems = new Class({
                     },
                     // Правый клик (сравнение)
                     contextmenu: function() {
-                        
+                        that.armor.compare.compare(post);
 
                         return false;
                     }
@@ -609,6 +609,15 @@ var Man = new Class({
                 that.options.filterName.set('value', '');
                 $('filter').fireEvent('submit');
                 $('add-items').tween('left', -150, 380);
+                
+            }).addEvent('contextmenu', function() {
+                if (that.options.items[this.get('id')]) {
+                    that.armor.compare.compare(that.options.items[this.get('id')]);
+                } else {
+                    this.fireEvent('click');
+                }
+
+                return false;
             });
         });
         this.options.filterClass.addEvent('change', function() {
@@ -731,6 +740,12 @@ var Man = new Class({
 
             if (item.skills.other) {
                 Object.each(item.skills.other, function(skill, skillName) {
+                    calcSkill(skillName, skill);
+                });
+            }
+
+            if (item.skills.point) {
+                Object.each(item.skills.point, function(skill, skillName) {
                     calcSkill(skillName, skill);
                 });
             }
@@ -867,6 +882,7 @@ var Armor = new Class({
 
     armorItems: null,
     man: null,
+    compare: null,
 
     initialize: function (options) {
         this.setOptions(options);
@@ -880,6 +896,11 @@ var Armor = new Class({
             this.man = new Man(options.man);
             this.man.armor = this;
         }
+
+        if (options.compare) {
+            this.compare = new ItemCompare(options.compare);
+            this.compare.armor = this;
+        }
     }
 
 });
@@ -889,7 +910,8 @@ var MessageBox = new Class({
     options: {
         html: '',
         element: null,
-        sp: null
+        sp: null,
+        close: false
     },
     message: null,
 
@@ -899,42 +921,316 @@ var MessageBox = new Class({
 
         if (undefined == options.sp) {
             var sp = new Element('div', {id: 'sp', class: 'hide', 'events':{'click':function() {that.hide();}}});
-            sp.inject($$('body')[0]);
+            sp.inject(document.body);
             this.options.sp = sp;
         } else {
             this.options.sp = sp;
         }
 
         var message = new Element('div', {
-            html: (null !== this.options.element) ? this.options.element.get('html') : this.options.html,
-            class:'modal hide'
-        }).inject($$('body')[0]);
+            html: ((null == this.options.element) ? this.options.html : this.options.element.get('html')) + '<div class="clear"></div>',
+            class:'modal hide',
+            styles: {
+                'top': 120
+            }
+        });
+
+        if (true == options.close) {
+            var close = new Element('button', {
+                class: 'close',
+                events: {
+                    click: function() {
+                        that.hide();
+                        return false;
+                    }
+                }
+            })
+            close.inject(message, 'top');
+        }
+
+        message.inject(document.body);
         this.message = message;
     },
     show: function() {
-        $$('body')[0].setStyle('overflow', 'hidden');
-        this.options.sp.removeClass('hide');
-
-        this.message.setStyle('left', Number.from($$('body')[0].getStyle('width')) / 2 - this.message.getSize().x / 2);
         this.message.removeClass('hide');
+        
+        var minWidth = this.message.getSize().x;
+        var left = (window.getSize().x < minWidth) ? 0 : window.getSize().x / 2 - this.message.getSize().x / 2;
+
+        this.message.setStyles({
+            left: left,
+            top: window.getScrollTop() + 50
+        });
+
+        this.options.sp.setStyles({
+            width: '100%',
+            height: '100%'
+        }).removeClass('hide');
+
+        $('container').setStyles({
+            width: (window.getSize().x > minWidth) ? window.getSize().x - 100 : minWidth - 100,
+            height: this.message.getSize().y + 200,
+            overflow: 'hidden'
+        })
+
+        var that = this;
+
+        window.addEvent('resize', function() {
+            if (!that.message.hasClass('hide')) {
+                $('container').setStyles({
+                    width: (window.getSize().x > minWidth) ? window.getSize().x - 100 : minWidth - 100,
+                    height: that.message.getSize().y + 200,
+                    overflow: 'hidden'
+                });
+
+                var left = (this.getSize().x < minWidth) ? 0 : this.getSize().x / 2 - that.message.getSize().x / 2;
+
+                that.message.setStyles({
+                    'left': left
+                });
+
+                that.options.sp.setStyles({
+                    width: '100%',
+                    height: '100%'
+                });
+            }
+        });
     },
     hide: function() {
-        $$('body')[0].setStyle('overflow', 'auto');
-        this.options.sp.addClass('hide');
         this.message.addClass('hide');
+        this.options.sp.addClass('hide');
+        $('container').setStyles({
+            width: 'auto',
+            height: 'auto',
+            overflow: 'auto'
+        })
     }
 });
 
 var ItemCompare = new Class({
     Implements: [Options],
     options: {
-
+        conpareContainer: null
     },
+    armor: null,
+
+    message : null,
+    item: null,
+
+
     initialize: function(options) {
         this.setOptions(options);
     },
     compare: function(item) {
+        var that = this;
+        if (undefined == item.point) {
+            item.point = 0;
+            item.skills.point = {};
+        }
 
+        this.item = item;
+        
+        var html = this.compareHtml(item);
+        this.message = new MessageBox({html: html, close: true});
+
+        if ([2, 3, 4, 5, 6, 12, 13].indexOf(Number.from(item.slot)) != -1) {
+            this.message.message.getElement('.up').addEvent('click', function() {
+                that.setPoint(that.item.point + 1);
+            });
+
+            this.message.message.getElement('.down').addEvent('click', function() {
+                that.setPoint(that.item.point - 1);
+            });
+        }
+
+        var buttonPanel = new Element('div.buttons-panel');
+
+        new Element('button', {
+            html: 'Добавить',
+            class: 'gp-button',
+            events: {
+                click: function() {
+                    that.armor.man.setItem(that.item);
+                    that.message.hide();
+                }
+            }
+        }).inject(buttonPanel);
+
+        new Element('button', {
+            html: 'Отмена',
+            class: 'gp-button',
+            events: {
+                click: function() {
+                    that.message.hide();
+                }
+            }
+        }).inject(buttonPanel);
+
+        buttonPanel.inject(this.message.message);
+
+        this.message.show();
+    },
+    setPoint: function(point) {
+        point = Number.from(point);
+
+        if (this.item.point == point) return ;
+        if (point < 0) point = 0;
+
+        this.item.point = Number.from(point);
+
+        if (!this.item.skills.point) {
+            this.item.skills.point = {};
+        }
+
+        if (2 == this.item.type) {
+            if (2 == this.item.slot) {
+                this.item.skills.point['Уклонение'] = 125 * point;
+                this.item.skills.point['Макс. HP'] = 100 * point;
+            }
+        }
+
+        // Скилы
+        var that = this;
+        var item = this.item;
+        var skills = {};
+
+        this.message.message.getElement('h3>span>i').set('text', (point > 0) ? '+' + point : point);
+        if (Object.getLength(item.skills.main)) {
+            var pointSkill = (item.skills.point && Object.getLength(item.skills.point)) ? Object.clone(item.skills.point) : {};
+
+            Object.each(item.skills.main, function(value, name) {
+                if (pointSkill[name]) {
+                    value += ' (+' + item.skills.point[name] + ')';
+                    delete(pointSkill[name]);
+                }
+                skills[name] = name + ' <span>' + value + '</span>';
+            });
+
+            if (Object.getLength(pointSkill)) {
+                Object.each(pointSkill, function(value, name) {
+                    skills[name] = name + ' <span>' + value + '</span>';
+                });
+            }
+
+            Object.each(skills, function(value, name) {
+                //<div class="skill" skill="main[' + name + ']">
+                if (that.message.message.getElement("[skill='main[" + name + "]']")) {
+                    that.message.message.getElement("[skill='main[" + name + "]']").set('html', value);
+                } else {
+                    new Element('div.skill[skill="main[' + name + ']"]', {
+                        html: value
+                    }).inject(that.message.message.getElement("[skill='main']>.clear"), 'before');
+                }
+            });
+        }
+    },
+    compareHtml: function(item) {
+        // PvP атака и PvP защита в доп параметры
+        if (0 != item.pvp_atack) item.skills.other['PvP атака'] = item.pvp_atack;
+        if (0 != item.pvp_protect) item.skills.other['PvP защита'] = item.pvp_protect;
+
+        var html = '';
+        
+        html += '<div class="compare span-11">';
+
+        // Картинка
+        html += '<div style="float: left; margin-right: 10px"><img src="' + item.smallimage + '" /></div>';
+
+        // Основные блоки
+        html += '<div class="span-9">';
+
+        // Заголовок
+        html += '<div class="block">' +
+            '<h3>' + item.name;
+
+        if ([2, 3, 4, 5, 6, 12, 13].indexOf(Number.from(item.slot)) != -1) {
+            html += ' <span><i>' + ((item.point) ? '+' + item.point : '0') + '</i> <button class="up"></button><button class="down"></button></span>';
+        }
+
+        html += '</h3>' +
+            '<div class="type">Тип <span>' + this.armor.options.types.itemsType[item.type] + '</span></div>' +
+            ((item.info) ? '<div>' + item.info + '</div>' : '') +
+            '<div>Можно использовать с ' + item.lvl + '-го уровня.</div>' +
+        '</div><hr />';
+
+        // Скилы
+        if (Object.getLength(item.skills.main)) {
+            html += '<div class="block" skill="main">';
+
+            var pointSkill = (item.skills.point && Object.getLength(item.skills.point)) ? Object.clone(item.skills.point) : {};
+
+            Object.each(item.skills.main, function(value, name) {
+                if (pointSkill[name]) {
+                    value += ' (+' + item.skills.point[name] + ')';
+                    delete(pointSkill[name]);
+                }
+                html += '<div class="skill" skill="main[' + name + ']">' + name + ' <span>' + value + '</span></div>';
+            });
+
+            if (Object.getLength(pointSkill)) {
+                Object.each(pointSkill, function(value, name) {
+                    html += '<div class="skill" skill="main[' + name + ']">' + name + ' <span>' + value + '</span></div>';
+                });
+            }
+
+            html += '<div class="clear"></div>' +
+            '</div><hr />';
+        }
+
+        // Доп скилы
+        if (Object.getLength(item.skills.other)) {
+            html += '<div class="block" skill="other">';
+
+            Object.each(item.skills.other, function(value, name) {
+                html += '<div class="skill" skill="other[' + name + ']">' + name + ' <span>' + value + '</span></div>';
+            });
+
+            html += '<div class="clear"></div>' +
+            '</div><hr />';
+        }
+
+        // Магические камни
+        if (item.stoun.count) {
+            html += '<div class="block">' +
+                '<div>Можно усилить магическими камнями ' + item.stoun.lvl + '-го уровня и ниже.</div><br />';
+
+            for (var i = 0; i < item.stoun.count; i++) {
+                html += '<div class="stoun"></div>';
+            }
+
+            html += '</div><hr />';
+        }
+
+        if (1 == item.longatack) {
+            html += '<div class="block">Дистанция атаки увеличина.</div><hr />';
+        }
+
+        if (1 == item.magicstoun) {
+            html += '<div class="block">Можно вставить божественный камень.</div><hr />';
+        }
+
+        // Комплект
+        if (item.complect && Object.getLength(item.complect)) {
+            html += '<div class="block"><div>' + item.complect.name + '</div>';
+            Array.each(item.complect.items, function(el) {
+                html += '<div class="complect-item"><a href="#">' + el + '</a></div>';
+            })
+            html += '</div><hr />';
+
+
+            html += '<div class="block">';
+            Object.each(item.complect.pieces, function(el, name) {
+                html += '<div>' + name + ' Кусочки: ';
+                Object.each(el, function(value, name) {
+                    html += name + ' +' + value + ', ';
+                })
+                html += '</div>';
+            })
+            html += '</div>';
+        }
+
+        html += '</div></div>';
+        return html;
     },
 
     // Инициализация диологового окна с вставкой камней

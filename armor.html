@@ -24,6 +24,7 @@
 
 </head>
 <body>
+<div id="container">
 <div class="header">
     <a href="/" style="text-decoration: none;">
         <img src="/images/logo.png" />
@@ -126,13 +127,17 @@
 
 </div>
 
-<div id="compare" class="span-11">
+<!--
+<div id="compare" class="compare span-11">
     <div style="float: left; margin-right: 10px">
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAFAJJREFUWEdlmQdUVXe2xo0VQbBgLwiCgPQqRXrvHQQEBCnSQapYKIIggggWxIaK2MBKUWPUiDUmTsYkaiZ1zBujielt8jLzMr+370Unb81jrf89555yz3d2+fa3N6+MGDECWSNUx48bMXr0aMXuiFdeUXyMGDFSdhT7I0e+MmKULMV25EjFedkqrxk+r/j+8k/5YzDiX/9S7ClODj+BF8f+pdyOUJ5XrN9/ly/DT32xZcT//PP3Eb/8+tsfvzleZSx21vp4uZrj52VFSIAtsREOpCe5UJLjzcaKINrqI+jcFktPZyIXetIZupjPnaEKrvSXc3RnJi3rYynJ8KM005/WDUlsb0hhS20SOzYv52xPKefPFtN/Mptjncns2RpD/bogirM9SYl3ID7SjpiwxSyLciQ23A53+4VMUB2neEPEcirYWekT6G1DqI8NYf5WJETYkZ/qTl15ILubojh1IIFrfWk8uF3E0w838ePX7dy/1sCJthzKMgKI8LImwtmcklQ/znWuYmBvMe2rE1mTHkxpWjAVK8PITfRlU/lSHr29ja++OMi7b67lbNdydmwMp7bMn1IBW5juRW6yByui7PF3M0JDfTwjJkwYj7PDIjkg1nMxIdjNmPhgC4pSnWha78fxjkhunl9BX08KbS1pbKjOJX+5P9kxToQ5m5As91SH2HGiMZm+XTmcWp/MoZXhHMgIpCcvmN68ULoyA6hL8OZQWxZtVUvZWFrI86dv8OXTDm5dymLXxhDWF3hRnOEmIN3JT3ElLtSGyZMmCEC18TjZG+IrD/NzMCDC05jUGGuqCt042BLMrQsp/NentSyPdODZxwf54Yvz9HeXEmGtR6W/NfsTXXl1Vxa9rSvpyomkvyCccwVBDBSGMFgUyvlVQZyQB+4vi+Xe9U4evH2QG6/X0SFg37p5np9+OMHQhQx2NYZQV+bN6hxPild6DQOcqDYMcIntQrydjPBzNiTW34yCFDtaqry5eCyWzz+t4eefzhLra0Hf1mSunqxkU1EUa70s2bfMlZNiufP7CjiWF8FrZZECLpizL9aZLF9Op3vTXxrNo5td3Ly8gy+fnOOdG3WUp/sS5+vEhw/u8Osv57lztZAtVX6U53hRIOEVE2TFpJcAHWwWigWNCXY3JinMgoosRw60BPLO7Wx+/rmbL5/1E+VtTkthMK3FUVQF2NCzQlwmFrrSX8WBrBCG1i3jvAJgfginc/w5mx3IlbpkbnVVcPNCM/1HKuhsjOdw0zJKEl2oyQ4gN8qDjXkxPHn8Lo8/2szOhgAq8twpSHMlSgFQQyyopqqCg6UeAa4mRPiYkB5jSV2RC32HInn2WR3//Odl2urSiHI2orkokkOlMRyXQD6a6smVMxLo27J5s3YF16pj6MsP4uRKXy7VLOPmoTJ69+SzdV0MTRmetKV50SxZXiVxWZ4VQENRCNlhrpQsDaJpTbp4qZ+e/VGsz3dnVbqL0oITNVSHXexso0+QuynRfqbkJdiwrcaLO5dS+PnHTp4/G6A02pkg/bnU54Zyuiya3hUe7C4O4Y3rm7i5MZMnHVlcKw+mT+Lu9Z15nN5TQHNJGNtSPTiR6Ud/XpDEZhDnZLs31ZsNCZIM4Y4sd7Ig29uLWgmJLz6/w+2r2RKHnhSlOxMdZM5EdQGorqaKq/0ica8ZcQGmlKU50N0WyMcPSvnHP/o4072OLA9z4i10aVYkQHEY2+McuSquvXWmlsetq3i+K437HTncPFXF7vpENskLHM/y4+KqYEmSEPoEwMksf46JdbvSfdgR70KxtwUpDmak2LvQUp7I2SMdfP7ZTvZtDWV1tqtY8CVAoRkPByPCPM1ICDGjJn8JF47ECFdtEfdeI1lIO8XOgBVCRVslOQ5JbO0qCefb56/xaGgX35yq5+mFOgY7i+W80EpBAK8XBzNYGMAZAXY6P4zB1VH0rYmmI8GdTaH2rPaxINfdhOXy3HgbO/ZXF7OreT3ffX2U3gOxrMlxJdLX9IUFJ6jitcSIKLlpRbglm8tdeeM1iYkfu/jw0TFi3c0pFDpJdTBk5+o4erems60ykXOH6/nz9e08/ksvBzansl2Avd+awt3qCHYk+7NpWQJrwqNpjgvnREEo/W2ZDOzIokPCoE4SbJkkZqxQVYy5Lb1NG6TilPP9N4c5vi+a0gwnIl4C1BCAPk7GLBUaSY+ylvjz5t27Rfz4Qw/t6+OJdbRmh1DImkBLtuSHsmd9HA9ubObqmXWcP7iaM7ty2V8axNNDOXywfyVXOgroLKphe0oKR3MC6RdL7o+xpz3bi7duNFInbr53pYaGVaEEGc4lztKeoaMtbG2o4MfvT3L6cAIV4uIoAaihiEElQEdjYvzMSYu0oK3aSwCWSUlqp1ViyFV3PlUJAWxf6UFBmB3NQiFddYkc3pLGzf5Kzu9cyeMjBTweLOWTy/X0rm5kb3oqx1e6cjrbm85YB9qiF/Pk/bM8/vQ4kXY6PLy1mdd7y4mU2M/2DuT4lhL27qzn269Ocu5IorJIRPqaoCHhpwToLbEQ7WNKcqi5uNiNN68VMnCsgm0SS84604lzXMyZmhhasrxpyvWnUwDe6F3H/YFK3urM5ovr1Xz1Zj2nyqvoyq1nT5wrp5KdOZbqxYAQ+c/fPBIx83e2VSRSELOYe1e3cvPcWlIDrImxd+ZoSzYffnCLr5+fo+9YMhuKPIjy+w+AER4mJAWaUlPgzNBgJr3t2RytjyPRbRFRFlasCxNqKfRkb0kgp7dl8NFQAx+/to53+wp4cKGIvppaLq07yoHU9XRkRsjxUr74tJOnUjk+fOsgm1NdyfY14uGNZt69XM2H12pIEHYIMrOV2u7Fe/ff4LtvrnDpbBb1QjUxAS8BCg96SQ2O9DQhwc9YFIgd508kcbw1jdXLPeisjKQi2o9dmYWsiVguawlXegr57YejXN+1njNre+kp7ea9rW/wcfcRPrnXJA86zjfPj4gISCDCRoc423lszA7iu886+fbL03z/xQm2iHcs501lsbYm9cKRt4cu8sM313jtXB61pe5E+hihLtiEBwWgiIUYAbjMZxGlydac6ozm3J5MkiR7t5WE8HFfETfac9iYmE2Wmz0f3NsoLrvGpd3CXe1f8V5nP99+dojnT9p58OYm/jS0kTsD66hMdqc2J4T7N1oZPFzMV3/ZzW9//0h0YwgOWnNZ7mxPjLDDOsn63q52vvtqiIHj2azLcyXYdaEAVBkG6GmrT7irMXGeBhQlWHGsPYwbg6vpa1lOlZSo2Zoa5MaKZYVGGlKc+P7L6/z++0f096/m9kA9D/9cx7rSAOZNn8RkCeyJ8pszp6gLh1ry2uESibeNXO7K4fl7Oyhc5kGgwTxqE8OkosQSYrmQ6uxg+o+3inWHGOzNFx50wd9ZV0TrS4CLpdQ5GRLtpkd+nAVdbcF8+qiJnuYU7C208XYxY8Y0DZKCLGnM8BIt9ybnL27nyd/20XcinymT1FATBZyc4kn3vlwOt6ZSmemNi6kWka6mbBcvvLovh+JED3wNZnNY+PSd223s35BFlKMJNRKzvZ0NfPp+Fwe2LyU3YbF4VecPgB5CmoFLxIrOemRFmrK3MYCPH26iUgi2WYj16MYkDm+IR3fOZErjXbl8YbPougMkBTsopXlJYRB//fAAj+62srVqGYXLpd4WhtGxdikBEoNrl4s6lwrkaqbD5kgnuutWcONyA4ebs0nytqcyPUCIeiXvvlFLR2MombHWeNhoK19a6WI3MbO/9AFB9rqkBBuxXcTCwz9Vk7vCR3SgOaNHjSQjzEFiygM7M30++/gG5jqz0NOewUfitvfvbiNWwGqojWPsmJFIQ4XK2NHSAvizNsWdGlEvXtLzlAXa0B7vQXWsDxUrQqlIDhMXL2KT1OuhixVcv5BLXYkrywKMcTSbi9r4FwBdrPTwWayHv602iX4GbF7twr0bJQweLxdGtyAyzovx48ZQn+3HYoNZzJ6qweriWKmdQ3Q0pKIhbzpm1CuojBmlXBaL5jBtshrhftZCN2vIiXHEZeE8OhI9aU7wJGOJOdGWxgSZ6pIjtXmncOzda5VcFopRaNEID0NsjWYhneawBV1Eqfja6uJnO59474Uifxy5cTGX+29sYX9NAr0HKxglVgxcbERjbgQD53fwP//4RJqgGFTHjmLc6JFojB+DuspoVFXG0L0rGz83E5qr4vng5mbaN6WQ4mrG/fOift5ppz7Nn4BF84l2MuHsnjyGTkrlulvLkY6lpMWYE7BED2v9GfJbYxUAVXAx18HbRhcf63nE+0hW5dhx9VwGTx93UpuXLAFrhbS+TJ2ozlB3o6icL9m7tZxxAlphsYlqY5mirsIkcfG40aPIEL333t1mTuwvIEBU0q2BWirj3XjycDc/PR2gRmLOx3g+yzytpSZH0F4tL/J2PR1NISz1M8RLDGWuO+0PgM7mC/Cx0cPXRm7yNaAmz57LAvCbZ120liVipm0qsTVa4moUDSUJ3LrSifaMieLWkUxUHQb3cqmLBVXHjWaBkLAiJqdPUWPgYBHlEsMtJdFsyA5jqVSQQFMd/EXGxXtbcaAhmU8fbGLX5hBi/YwEoBZmC14CFK5RAPS2WSAxqEWivz4bChy41p8mvNRF2/oEckODBYjEmbiyuTyKO4M1TBAg4yURJk8YpwSnqTEMUvFdQ0ArLDtWrp+lqcaZffmUhSymVLRlut9iIm2lMNgaE2JjSmNROAM9ZWLBDdLw+xLjYygZrIXJAk0UA4URCjJ0Fhd7WevgZzOPhAB9Nq5y4PW+VAF4SJn+1YnBzJ2kqnxgd0sKf7pUrQSgAPh/wb20oqbGeCVQxTWzpqjSsSGOwmA7KgLtyHS1kF5aEs/WlEgbK1HpMRyUtvXtGxXSh3spXexqMQ8j7SmSmC8ALhGAnlbaSoBJAQaSJOLi04l8/eU+eo5U0pgehpYAnC6EfOnwap799Shu1rpKwJP+w4L/dvcEFSXAedM12Lk2khQ3SwpkerHCyZQYawPc9BeQ7L2EluJQbr/ewLULeVJBHAlz15OknY3hvMl/AHQw08ZDAHpbz1W6uDLbloHuKL56tpNb17aLAg5ER0pXoL0eV3u38uxvgyJsY5UJoS7Zq6AZdbUxSrcrslhdkkZDkk8BUHv2JJpEQ0bamJBorwC3kOVSVh0WzqYmN5im0kiuD1YJa6ySjm4JoVLNHExmoyf3qby0oIOptph1Pp4Wc4j1XEB5qtTjHf787ZMa3ry9g9JwV3TEepoTVTkgFeXh7QYmSbwpLKhws4Jepk8azzzhR91Zk9GRBJop108YLwkkreMqGQ6FWiyiOsmLnCAbWkRNe4tBVobaUp0VxsCREl4fzJf5jMxklmhjazATnVkT/wBoJynvZKKFi8kswl20KUwyZ98mD/5yv4hXhSJKQx3Rk1qsyNo10jZmCo2MGTlSjk0k0nERGX4WZPhYkultyQqZ8SSKQo+3M2K51NlFczRZGWxLmLkuW/ICWRW9hCJR5sGOBkS7LKIs0YvWyqVcPJklgyMb3GzmSAZrojVNXVhjzHCSKAA6Gs/DwXCGuFGLlVHGtFW6yASqkB1bMli/1AWDmVOUFlNk86IZk0mTHmVreYjI82Aqy+LZ0pjFjrZCdu8sYWNtBnFR7tiaaGO8YCZrEkXfiWsLgmzFajbESYe4SqqLtc4MkjxNZeiUy87GWJaFGGFvOlMSRJM5UonGvQRoKwCXmMzDTn86XlazSfCXalJoL3yXJ6TtL91ctGSlirhyDH5mC9gsjVBTdSzXrmznv3+5ym+/XpLtIL/+eI6//3RGZi2yfu3hl1+O0lyfQrVYPc7egATpHutE5bgZidxK88RUuFJXkmifiJF7Q83kJDljqTcN/bmTmSVJqQSoGH3YGImLTecLwJm4GM+UsZo2+QlmrFvlRs+WFKpk5qIppBsqbeLGogD6eysF1KvSmp4U5dzJZ5808f67ldy/W8L9O6t4+NYqHt3Llea/kAO742mR+5NcjPGS6UR5vDM+8ixnSRJXMy1SZFAaLuHh52hIXWmEVJDp6M6cyAyhqmGAUpBtjLQEoA5WC0SC600VyplNpPsCqmR0cbG7hAh/W6ynTWaZuOfP9+p4/nkLTz5pEMVTJgokldMHItm3xZcdtR4i8z3Z3+gt0wk/Tu+VOUyOPd2t6RRHLcFR1I+T/hycJAlSZFDaKsBP7ClkrlhxseF0ib2pLJTsnT9tAjMnvgCoqjIOK8M5kjlzMBHTWghBOhhMx95oJkcbk/jk/f2ky0RgodZkTh0Wtw4kSk8cLzQUTfeOQFqr3FifYyuJZUFOnBn5y8woXWElxxazQQg/OcKa21dqOdOeSdUKL4lHZ440LWdtsidLJFy21yRSXRyBmY4m+qI3FeC0pPrMFFZQWlCRKQYSC8Zzp0giqGM0ZyIWAsZKTxMrgxn0HS2la2+uTB0WydTLQaSYM81rXNhU5sTa7MXKUEgKMSRK6CnESZsQZx2ivfRE0+mTEGTAtrp43hNaOncwj5bSMLqaUtgjc2s1oaeZk8djJ7IqQOaSxvM1la7VmjoMcKqUzrFjBKBiUD1ehMBcQaw1WZX5cpPiggXTJ6A/S52509QkEzVxFbcHCgWFe+kS47tQ5oV6BLlIBbKdi6PJDGwWTsV8wRQRslOwln0bw2m4WGpxcPsKYgKt0ZeXXjBbQ7ldI1MuG6M56IkxdGdpoC3PmieWmy3PnynJMUUSUv6rMDxEf/HBOKVaGfP/lkKoKnSZmpDuBBEB6sqqIUu2CrmvOK44ryqsr1iK+qncV96juFZl+LwsRfH/9/6LaxXVYniNUbpUsUaPGvUSHP8LxUPomAYbJhsAAAAASUVORK5CYII=" />
     </div>
     <div class="span-9">
         <div class="block">
-            <h3>Клинок рудры</h3>
+            <h3>
+                Клинок рудры
+                <span><i>+1</i> <button class="up"></button><button class="down"></button></span>
+            </h3>
             <div class="type">Тип <span>Мечи</span></div>
             <div>[Обмен невозможен], [Невозможно положить на склад аккаунта], [Невозможно положить на склад легиона]</div>
             <div>Можно использовать с 55-го уровня.</div>
@@ -183,7 +188,10 @@
         </div>
     </div>
 </div>
+-->
 
+<div class="clear"></div>
+</div>
 <script language="javascript">
     window.addEvent('domready', function() {
         var armor = new Armor({
@@ -198,6 +206,9 @@
                 filterType: $('filter-type'),
                 filterName: $('filter-name'),
                 filterClass: $('class')
+            },
+            compare: {
+                conpareContainer: $('compare')
             }
         });
     });
