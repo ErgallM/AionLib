@@ -1036,11 +1036,15 @@ var ItemCompare = new Class({
 
         if ([2, 3, 4, 5, 6, 12, 13].indexOf(Number.from(item.slot)) != -1) {
             this.message.message.getElement('.up').addEvent('click', function() {
-                that.setPoint(that.item.point + 1);
+                if (Number.from(that.item.q) >= 5) {
+                    if (that.item.point <= 14) that.setPoint(that.item.point + 1);
+                } else {
+                    if (that.item.point <= 9) that.setPoint(that.item.point + 1);
+                }
             });
 
             this.message.message.getElement('.down').addEvent('click', function() {
-                that.setPoint(that.item.point - 1);
+                if (that.item.point >= 1) that.setPoint(that.item.point - 1);
             });
         }
 
@@ -1083,11 +1087,25 @@ var ItemCompare = new Class({
             this.item.skills.point = {};
         }
 
-        if (2 == this.item.type) {
-            if (2 == this.item.slot) {
-                this.item.skills.point['Уклонение'] = 125 * point;
-                this.item.skills.point['Макс. HP'] = 100 * point;
-            }
+        if (2 == this.item.slot) {
+            // Торс
+            this.item.skills.point['Физ. защита'] = 3 * point;
+            this.item.skills.point['Блок ф. крит.'] = 4 * point;
+            this.item.skills.point['Макс. HP'] = 14 * point;
+        } else
+
+        if (3 == this.item.slot) {
+            // Штаны
+            this.item.skills.point['Физ. защита'] = 2 * point;
+            this.item.skills.point['Блок ф. крит.'] = 3 * point;
+            this.item.skills.point['Макс. HP'] = 12 * point;
+        } else
+
+        if ([4, 5, 6].indexOf(this.item.slot) != -1) {
+            // Ботинки, Наплечники, Перчатки
+            this.item.skills.point['Физ. защита'] = 1 * point;
+            this.item.skills.point['Блок ф. крит.'] = 2 * point;
+            this.item.skills.point['Макс. HP'] = 10 * point;
         }
 
         // Скилы
@@ -1109,7 +1127,7 @@ var ItemCompare = new Class({
 
             if (Object.getLength(pointSkill)) {
                 Object.each(pointSkill, function(value, name) {
-                    skills[name] = name + ' <span>' + value + '</span>';
+                    skills[name] = name + ' <span>+' + value + '</span>';
                 });
             }
 
@@ -1170,7 +1188,7 @@ var ItemCompare = new Class({
 
             if (Object.getLength(pointSkill)) {
                 Object.each(pointSkill, function(value, name) {
-                    html += '<div class="skill" skill="main[' + name + ']">' + name + ' <span>' + value + '</span></div>';
+                    html += '<div class="skill" skill="main[' + name + ']">' + name + ' <span>+' + value + '</span></div>';
                 });
             }
 
