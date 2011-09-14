@@ -708,7 +708,8 @@ var Man = new Class({
             this.options.items[div.get('id')] = item;
             img.inject(div.empty());
             this.updateStatus();
-            $('add-items').tween('left', 380, -150);
+
+            if ($('add-items').getStyle('left').toInt() > 0) $('add-items').tween('left', 380, -150);
         }
     },
 
