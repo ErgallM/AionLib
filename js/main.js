@@ -1123,9 +1123,10 @@ var ItemCompare = new Class({
             if (5 == type) {
                 if (point <= 10) {
                     this.item.skills.point['Блок урона'] = 2 * point;
+                    this.item.skills.point['Блок щитом'] = 0 * point;
                 } else {
                     this.item.skills.point['Блок урона'] = 2 * point;
-                    this.item.skills.point['Блок щитом'] = 30 * point;
+                    this.item.skills.point['Блок щитом'] = 30 * (point - 10);
                 }
             }
 
@@ -1234,6 +1235,7 @@ var ItemCompare = new Class({
         var skills = {};
 
         this.message.message.getElement('h3>span>i').set('text', (point > 0) ? '+' + point : point);
+
         if (Object.getLength(item.skills.main)) {
             var pointSkill = (item.skills.point && Object.getLength(item.skills.point)) ? Object.clone(item.skills.point) : {};
 
@@ -1266,8 +1268,6 @@ var ItemCompare = new Class({
                     }).inject(that.message.message.getElement("[skill='main']>.clear"), 'before');
                 }
             });
-
-
         }
     },
     compareHtml: function(item) {
