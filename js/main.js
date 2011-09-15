@@ -752,7 +752,7 @@ var Man = new Class({
             }
 
             //pvp
-            if (item.pvp_atack != 0) calcSkill('PvP урон', item.pvp_atack);
+            if (item.pvp_atack != 0) calcSkill('PvP атака', item.pvp_atack);
             if (item.pvp_protect != 0) calcSkill('PvP защита', item.pvp_protect);
         });
 
@@ -858,7 +858,10 @@ var Armor = new Class({
 
                 '34':'Агрессия',
 
-                '35':'ЛВК'
+                '35':'ЛВК',
+
+                '36':'PvP атака',
+                '37':'PvP защита'
             },
             slots: {
                 '1': 'Голова',
@@ -1087,25 +1090,142 @@ var ItemCompare = new Class({
             this.item.skills.point = {};
         }
 
-        if (2 == this.item.slot) {
-            // Торс
-            this.item.skills.point['Физ. защита'] = 3 * point;
-            this.item.skills.point['Блок ф. крит.'] = 4 * point;
-            this.item.skills.point['Макс. HP'] = 14 * point;
-        } else
+        var slot = Number.from(this.item.slot);
+        var type = Number.from(this.item.type);
 
-        if (3 == this.item.slot) {
-            // Штаны
-            this.item.skills.point['Физ. защита'] = 2 * point;
-            this.item.skills.point['Блок ф. крит.'] = 3 * point;
-            this.item.skills.point['Макс. HP'] = 12 * point;
-        } else
+        // Оружие и щиты
+        if ([12, 13].indexOf(slot) != -1) {
 
-        if ([4, 5, 6].indexOf(this.item.slot) != -1) {
-            // Ботинки, Наплечники, Перчатки
-            this.item.skills.point['Физ. защита'] = 1 * point;
-            this.item.skills.point['Блок ф. крит.'] = 2 * point;
-            this.item.skills.point['Макс. HP'] = 10 * point;
+            // 7: Копья, 8: Двуручные мечи, 13: Луки
+            if ([7, 9, 13].indexOf(type) != -1) {
+                this.item.skills.point['Атака'] = 4 * point;
+            } else
+
+            // 11: Булавы, 12: Посохи
+            if ([11, 12].indexOf(type) != -1) {
+                this.item.skills.point['Атака'] = 3 * point;
+                this.item.skills.point['Сила магии'] = 20 * point;
+            } else
+
+            // 9: Мечи, 10: Кинжалы
+            if ([9, 10].indexOf(type) != -1) {
+                this.item.skills.point['Атака'] = 2 * point;
+            } else
+
+            // 14: Орбы, 15: Гримуары
+            if ([14, 15].indexOf(type) != -1) {
+                this.item.skills.point['Атака'] = 3 * point;
+                this.item.skills.point['Сила магии'] = 20 * point;
+            } else
+
+
+            // 5: Щиты
+            if (5 == type) {
+                if (point <= 10) {
+                    this.item.skills.point['Блок урона'] = 2 * point;
+                } else {
+                    this.item.skills.point['Блок урона'] = 2 * point;
+                    this.item.skills.point['Блок щитом'] = 30 * point;
+                }
+            }
+
+        } else {
+
+            // Тканые доспехи
+            if (1 == type) {
+                // Тело
+                if (2 == slot) {
+                    this.item.skills.point['Физ. защита'] = 3 * point;
+                    this.item.skills.point['Макс. HP'] = 14 * point;
+                    this.item.skills.point['Блок ф. крит.'] = 4 * point;
+                } else
+
+                // Штаны
+                if (3 == slot) {
+                    this.item.skills.point['Физ. защита'] = 2 * point;
+                    this.item.skills.point['Макс. HP'] = 12 * point;
+                    this.item.skills.point['Блок ф. крит.'] = 3 * point;
+                } else
+
+                // Ботинки, Наплечники, Перчатки
+                if ([4, 5, 6].indexOf(slot) != -1) {
+                    this.item.skills.point['Физ. защита'] = 1 * point;
+                    this.item.skills.point['Макс. HP'] = 10 * point;
+                    this.item.skills.point['Блок ф. крит.'] = 2 * point;
+                }
+            } else
+
+            // Кожаные доспехи
+            if (2 == type) {
+                // Тело
+                if (2 == slot) {
+                    this.item.skills.point['Физ. защита'] = 4 * point;
+                    this.item.skills.point['Макс. HP'] = 12 * point;
+                    this.item.skills.point['Блок ф. крит.'] = 4 * point;
+                } else
+
+                // Штаны
+                if (3 == slot) {
+                    this.item.skills.point['Физ. защита'] = 3 * point;
+                    this.item.skills.point['Макс. HP'] = 10 * point;
+                    this.item.skills.point['Блок ф. крит.'] = 3 * point;
+                } else
+
+                // Ботинки, Наплечники, Перчатки
+                if ([4, 5, 6].indexOf(slot) != -1) {
+                    this.item.skills.point['Физ. защита'] = 2 * point;
+                    this.item.skills.point['Макс. HP'] = 10 * point;
+                    this.item.skills.point['Блок ф. крит.'] = 2 * point;
+                }
+            } else
+
+            // Кольчужные доспехи
+            if (3 == type) {
+                // Тело
+                if (2 == slot) {
+                    this.item.skills.point['Физ. защита'] = 5 * point;
+                    this.item.skills.point['Макс. HP'] = 10 * point;
+                    this.item.skills.point['Блок ф. крит.'] = 4 * point;
+                } else
+
+                // Штаны
+                if (3 == slot) {
+                    this.item.skills.point['Физ. защита'] = 4 * point;
+                    this.item.skills.point['Макс. HP'] = 8 * point;
+                    this.item.skills.point['Блок ф. крит.'] = 3 * point;
+                } else
+
+                // Ботинки, Наплечники, Перчатки
+                if ([4, 5, 6].indexOf(slot) != -1) {
+                    this.item.skills.point['Физ. защита'] = 3 * point;
+                    this.item.skills.point['Макс. HP'] = 6 * point;
+                    this.item.skills.point['Блок ф. крит.'] = 2 * point;
+                }
+            } else
+
+            // Латные доспехи
+            if (4 == type) {
+                // Тело
+                if (2 == slot) {
+                    this.item.skills.point['Физ. защита'] = 6 * point;
+                    this.item.skills.point['Макс. HP'] = 8 * point;
+                    this.item.skills.point['Блок ф. крит.'] = 4 * point;
+                } else
+
+                // Штаны
+                if (3 == slot) {
+                    this.item.skills.point['Физ. защита'] = 5 * point;
+                    this.item.skills.point['Макс. HP'] = 6 * point;
+                    this.item.skills.point['Блок ф. крит.'] = 3 * point;
+                } else
+
+                // Ботинки, Наплечники, Перчатки
+                if ([4, 5, 6].indexOf(slot) != -1) {
+                    this.item.skills.point['Физ. защита'] = 4 * point;
+                    this.item.skills.point['Макс. HP'] = 4 * point;
+                    this.item.skills.point['Блок ф. крит.'] = 2 * point;
+                }
+            }
         }
 
         // Скилы
@@ -1120,14 +1240,17 @@ var ItemCompare = new Class({
             Object.each(item.skills.main, function(value, name) {
                 if (pointSkill[name]) {
                     value += ' (+' + item.skills.point[name] + ')';
-                    delete(pointSkill[name]);
                 }
                 skills[name] = name + ' <span>' + value + '</span>';
+                delete(pointSkill[name]);
             });
 
             if (Object.getLength(pointSkill)) {
                 Object.each(pointSkill, function(value, name) {
-                    skills[name] = name + ' <span>+' + value + '</span>';
+                    if ('0' != value) skills[name] = name + ' <span>+' + value + '</span>';
+                    else {
+                        that.message.message.getElement("[skill='point[" + name + "]']").dispose();
+                    }
                 });
             }
 
@@ -1135,12 +1258,16 @@ var ItemCompare = new Class({
                 //<div class="skill" skill="main[' + name + ']">
                 if (that.message.message.getElement("[skill='main[" + name + "]']")) {
                     that.message.message.getElement("[skill='main[" + name + "]']").set('html', value);
+                } else if (that.message.message.getElement("[skill='point[" + name + "]']")) {
+                    that.message.message.getElement("[skill='point[" + name + "]']").set('html', value);
                 } else {
-                    new Element('div.skill[skill="main[' + name + ']"]', {
+                    new Element('div.skill[skill="point[' + name + ']"]', {
                         html: value
                     }).inject(that.message.message.getElement("[skill='main']>.clear"), 'before');
                 }
             });
+
+
         }
     },
     compareHtml: function(item) {

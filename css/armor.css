@@ -203,6 +203,11 @@ button.close {
     display: block;
     margin-top: 5px;
 }
+.compare h3 span i {
+    width: 35px;
+    display: inline-block;
+    text-align: center;
+}
 .compare .up {
     background: url(/images/up.png) top left no-repeat;
     width: 16px;
