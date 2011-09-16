@@ -881,6 +881,35 @@ var Armor = new Class({
                 '12':'Главная или Вторая Рука',
                 '13':'Главная Рука'
             }
+        },
+        magicStouns: {
+            1:  [
+                {
+                    name: 'Маг. камень: HP +95',
+                    q: 1,
+                    skills: {'Макс. HP': 95}
+                },
+                {
+                    name: 'Маг. камень: HP +85',
+                    q: 1,
+                    skills: {'Макс. HP': 85}
+                },
+                {
+                    name: 'Маг. камень: HP +75',
+                    q: 1,
+                    skills: {'Макс. HP': 75}
+                },
+                {
+                    name: 'Маг. камень: HP +65',
+                    q: 1,
+                    skills: {'Макс. HP': 65}
+                },
+                {
+                    name: 'Маг. камень: HP +55',
+                    q: 1,
+                    skills: {'Макс. HP': 55}
+                }
+            ]
         }
     },
 
@@ -919,6 +948,8 @@ var MessageBox = new Class({
     },
     message: null,
 
+    armor: null,
+
     initialize: function (options) {
         this.setOptions(options);
         var that = this;
@@ -952,6 +983,8 @@ var MessageBox = new Class({
             close.inject(message, 'top');
         }
 
+        this.initMagicStounPanel();
+
         message.inject(document.body);
         this.message = message;
     },
@@ -979,6 +1012,12 @@ var MessageBox = new Class({
 
         var that = this;
 
+        if ('' != this.stounPanel.get('html')) {
+            this.stounPanel.removeClass('hide');
+            this.stounPanel.setStyle('top', this.message.getElement('.magicStoun').getPosition().y + 'px');
+            this.stounPanel.setStyle('left', this.message.getElement('.magicStoun').getPosition().x + this.message.getSize().x - this.message.getStyle('padding-left').toInt() * 2 - 15 + 'px');
+        }
+
         window.addEvent('resize', function() {
             if (!that.message.hasClass('hide')) {
                 $('container').setStyles({
@@ -997,6 +1036,9 @@ var MessageBox = new Class({
                     width: '100%',
                     height: '100%'
                 });
+
+                that.stounPanel.setStyle('top', that.message.getElement('.magicStoun').getPosition().y + 'px');
+                that.stounPanel.setStyle('left', that.message.getElement('.magicStoun').getPosition().x + that.message.getSize().x - that.message.getStyle('padding-left').toInt() * 2 - 15 + 'px');
             }
         });
     },
@@ -1007,7 +1049,53 @@ var MessageBox = new Class({
             width: 'auto',
             height: 'auto',
             overflow: 'auto'
-        })
+        });
+        this.stounPanel.addClass('hide');
+    },
+    initMagicStounPanel: function() {
+        var that = this;
+        if ($$('.magicStounPanel').length) {
+            this.stounPanel = $$('.magicStounPanel')[0];
+        } else {
+            this.stounPanel = new Element('div.magicStounPanel.hide', {
+                html: '<h3>Магические камни</h3>' +
+                        '<div><div><label>Тип: <select id="selectMagicStounList">' +
+
+                            '<option value="0">Выберите тип</option>' +
+                            '<option value="1">HP</option>' +
+
+                        '</select></label></div>' +
+                        '<div id="magicStounList">' +
+
+                '</div></div>'
+
+            }).inject(document.body);
+
+            this.stounPanel.getElement('#selectMagicStounList').addEvent('change', function() {
+                var magicStounList = $('magicStounList');
+                magicStounList.empty();
+
+                Array.each(that.armor.options.magicStouns[this.get('value').toInt()], function(el) {
+                    new Element('div.magicStounItem.q' + el.q, {
+                        html: el.name,
+                        events: {
+                            click: function() {
+                                Object.each(el.skills, function(value, name) {
+                                    if (null == that.armor.compare.selectStoun) {
+                                        console.log('select stoun');
+                                    } else {
+                                        var i = that.armor.compare.selectStoun.get('data-stoun');
+                                        that.armor.compare.item.skills.stoun[i] = {'name': name, 'value': value};
+                                    }
+                                });
+                                console.log(that.armor.compare.item.skills);
+                                that.armor.compare.setPoint(that.armor.compare.item.point);
+                            }
+                        }
+                    }).inject(magicStounList);
+                })
+            });
+        }
     }
 });
 
@@ -1021,6 +1109,7 @@ var ItemCompare = new Class({
     message : null,
     item: null,
 
+    selectStoun: null,
 
     initialize: function(options) {
         this.setOptions(options);
@@ -1032,10 +1121,19 @@ var ItemCompare = new Class({
             item.skills.point = {};
         }
 
+        if (item.stoun && item.stoun.count) {
+            item.skills.stoun = {};
+            item.selectStoun = {};
+            for (var i = 1; i <= item.stoun.count; i++) {
+                item.skills.stoun[i] = {};
+            }
+        }
+
         this.item = item;
         
         var html = this.compareHtml(item);
         this.message = new MessageBox({html: html, close: true});
+        this.message.armor = this.armor;
 
         if ([2, 3, 4, 5, 6, 12, 13].indexOf(Number.from(item.slot)) != -1) {
             this.message.message.getElement('.up').addEvent('click', function() {
@@ -1074,6 +1172,13 @@ var ItemCompare = new Class({
             }
         }).inject(buttonPanel);
 
+        // Выбор магических камней
+        if (item.selectStoun) {
+            this.message.message.getElements('.stoun').addEvent('click', function(e) {
+                that.selectStoun = this;
+            });
+        }
+
         buttonPanel.inject(this.message.message);
 
         this.message.show();
@@ -1081,7 +1186,7 @@ var ItemCompare = new Class({
     setPoint: function(point) {
         point = Number.from(point);
 
-        if (this.item.point == point) return ;
+        //if (this.item.point == point) return ;
         if (point < 0) point = 0;
 
         this.item.point = Number.from(point);
@@ -1238,33 +1343,56 @@ var ItemCompare = new Class({
 
         if (Object.getLength(item.skills.main)) {
             var pointSkill = (item.skills.point && Object.getLength(item.skills.point)) ? Object.clone(item.skills.point) : {};
+            var stounSkill = {};
 
-            Object.each(item.skills.main, function(value, name) {
-                if (pointSkill[name]) {
-                    value += ' (+' + item.skills.point[name] + ')';
-                }
-                skills[name] = name + ' <span>' + value + '</span>';
-                delete(pointSkill[name]);
-            });
-
-            if (Object.getLength(pointSkill)) {
-                Object.each(pointSkill, function(value, name) {
-                    if ('0' != value) skills[name] = name + ' <span>+' + value + '</span>';
-                    else {
-                        that.message.message.getElement("[skill='point[" + name + "]']").dispose();
+            if (item.skills.stoun && Object.getLength(item.skills.stoun)) {
+                Object.each(item.skills.stoun, function(stoun) {
+                    if (undefined != stoun.name) {
+                        if (!stounSkill[stoun.name]) {
+                            stounSkill[stoun.name] = stoun.value;
+                        } else {
+                            stounSkill[stoun.name] += stoun.value;
+                        }
                     }
                 });
             }
 
+            Object.each(item.skills.main, function(value, name) {
+                if (pointSkill[name]) {
+                    value += ' (+' + pointSkill[name] + ')';
+                    delete(pointSkill[name]);
+                }
+                if (stounSkill[name]) {
+                    value += ' (+' + stounSkill[name] + ')'
+                    delete(stounSkill[name]);
+                }
+                skills[name] = value;
+            });
+            console.log(skills);
+            Object.each(pointSkill, function(value, name) {
+                if (stounSkill[name]) {
+                    value += ' (+' + stounSkill[name] + ')'
+                    delete(stounSkill[name]);
+                }
+                skills[name] = value;
+            });
+            console.log(skills);
+            Object.each(stounSkill, function(value, name) {
+                skills[name] = value;
+            });
+            console.log(skills);
+
+
+            if (that.message.message.getElements("[skill='main'] .point")) {
+                that.message.message.getElements("[skill='main'] .point").destroy();
+            }
+
             Object.each(skills, function(value, name) {
-                //<div class="skill" skill="main[' + name + ']">
                 if (that.message.message.getElement("[skill='main[" + name + "]']")) {
-                    that.message.message.getElement("[skill='main[" + name + "]']").set('html', value);
-                } else if (that.message.message.getElement("[skill='point[" + name + "]']")) {
-                    that.message.message.getElement("[skill='point[" + name + "]']").set('html', value);
+                    that.message.message.getElement("[skill='main[" + name + "]']>span").set('html', value);
                 } else {
-                    new Element('div.skill[skill="point[' + name + ']"]', {
-                        html: value
+                    new Element('div.skill.point', {
+                        html: name + ' <span>' + value + '</span>'
                     }).inject(that.message.message.getElement("[skill='main']>.clear"), 'before');
                 }
             });
@@ -1337,11 +1465,11 @@ var ItemCompare = new Class({
 
         // Магические камни
         if (item.stoun.count) {
-            html += '<div class="block">' +
+            html += '<div class="block magicStoun">' +
                 '<div>Можно усилить магическими камнями ' + item.stoun.lvl + '-го уровня и ниже.</div><br />';
 
             for (var i = 0; i < item.stoun.count; i++) {
-                html += '<div class="stoun"></div>';
+                html += '<div class="stoun" data-stoun="' + i + '"></div>';
             }
 
             html += '</div><hr />';
@@ -1383,4 +1511,4 @@ var ItemCompare = new Class({
     compareInsertStounInit: function(item) {
         
     }
-})
+});

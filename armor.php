@@ -101,4 +101,3 @@ function get_items($options, $post) {
     }
     return json_encode($items);
 }
-

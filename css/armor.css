@@ -97,7 +97,7 @@
     box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2);
 
     outline: 0 none;
-    z-index: 1101;
+    z-index: 1102;
 }
 .modal .buttons-panel {
     text-align: center;
@@ -280,4 +280,35 @@ button.close {
 
 #item-1 {
     background: url(/images/data/man/Aion_icon_1.jpg) left top no-repeat;
+}
+
+.magicStounPanel {
+    position: absolute;
+    min-height: 50px;
+    width: 300px;
+    border-color: #ACACAC #ACACAC #999;
+    border-style: solid;
+    border-width: 1px;
+    z-index: 1001;
+    top: 0px;
+    left: 0px;
+    background: #fff;
+
+    padding: 10px;
+
+    /* Chrome */
+    -webkit-box-shadow: rgba(0, 0, 0, 0.199219) 0px 4px 16px 0px;
+    box-shadow: rgba(0, 0, 0, 0.199219) 0px 4px 16px 0px;
+
+    /* FireFox */
+    -moz-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+
+    /* Opera */
+    box-shadow: 0px 4px 16px;
+
+    /* IE */
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2);
+}
+.magicStounPanel h3 {
+    text-align: center;
 }
