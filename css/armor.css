@@ -16,7 +16,7 @@
     height: 40px;
     border: 1px solid #222222;
     border-radius: 5px;
-    -moz-border-radius: 2px 2px 2px 2px;
+    -moz-border-radius: 5px;
     cursor: pointer;
 }
 .item.selectedItem {
@@ -192,9 +192,29 @@ button.close {
 
 .compare .stoun {
     float: left;
-    width: 150px;
+    width: 40px;
+    margin-right: 110px;
     height: 40px;
-    background: url(/images/manastonesocket.png) top left no-repeat;
+    border: 1px solid #000;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+.compare .stoun.q0, .magicStounItem.q0 {
+    background: url(/images/data/magic-stoun/hp-white.png) left top no-repeat;
+}
+.compare .stoun.q1, .magicStounItem.q1 {
+    background: url(/images/data/magic-stoun/hp-green.png) left top no-repeat;
+}
+.compare .stoun.selectedItem {
+    box-shadow: 0 0 5px 1px #0099ff;
+}
+.magicStounItem {
+    height: 40px;
+    line-height: 40px;
+    padding-left: 45px;
+    margin-bottom: 5px;
+    cursor: pointer;
 }
 .compare .complect-item {
     margin-left: 20px;

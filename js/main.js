@@ -726,6 +726,8 @@ var Man = new Class({
                 }
                 value = Number.from(value);
 
+                if (!value) return;
+
                 status[name] = (!status[name]) ? value : status[name] + value;
             }
         }
@@ -748,6 +750,13 @@ var Man = new Class({
             if (item.skills.point) {
                 Object.each(item.skills.point, function(skill, skillName) {
                     calcSkill(skillName, skill);
+                });
+            }
+
+            if (item.skills.stoun) {
+                Object.each(item.skills.stoun, function(st) {
+                    if (Object.getLength(st))
+                        calcSkill(st.name, st.value);
                 });
             }
 
@@ -1086,6 +1095,7 @@ var MessageBox = new Class({
                                     } else {
                                         var i = that.armor.compare.selectStoun.get('data-stoun');
                                         that.armor.compare.item.skills.stoun[i] = {'name': name, 'value': value};
+                                        that.armor.compare.selectStoun.addClass('q' + el.q);
                                     }
                                 });
                                 console.log(that.armor.compare.item.skills);
@@ -1174,8 +1184,16 @@ var ItemCompare = new Class({
 
         // Выбор магических камней
         if (item.selectStoun) {
-            this.message.message.getElements('.stoun').addEvent('click', function(e) {
+            this.message.message.getElements('.stoun').addEvent('click', function() {
                 that.selectStoun = this;
+                $$('.stoun.selectedItem').removeClass('selectedItem');
+                this.addClass('selectedItem');
+            }).addEvent('contextmenu', function() {
+                this.removeClass('q0').removeClass('q1');
+                var i = this.get('data-stoun');
+                that.armor.compare.item.skills.stoun[i] = {};
+                that.armor.compare.setPoint(that.armor.compare.item.point);
+                return false;
             });
         }
 
@@ -1341,62 +1359,54 @@ var ItemCompare = new Class({
 
         this.message.message.getElement('h3>span>i').set('text', (point > 0) ? '+' + point : point);
 
-        if (Object.getLength(item.skills.main)) {
-            var pointSkill = (item.skills.point && Object.getLength(item.skills.point)) ? Object.clone(item.skills.point) : {};
-            var stounSkill = {};
+        var mainSkill = (item.skills.main && Object.getLength(item.skills.main)) ? Object.clone(item.skills.main) : {};
+        var pointSkill = (item.skills.point && Object.getLength(item.skills.point)) ? Object.clone(item.skills.point) : {};
+        var stounSkill = (item.skills.stoun && Object.getLength(item.skills.stoun)) ? Object.clone(item.skills.stoun) : {};
 
-            if (item.skills.stoun && Object.getLength(item.skills.stoun)) {
-                Object.each(item.skills.stoun, function(stoun) {
-                    if (undefined != stoun.name) {
-                        if (!stounSkill[stoun.name]) {
-                            stounSkill[stoun.name] = stoun.value;
-                        } else {
-                            stounSkill[stoun.name] += stoun.value;
-                        }
-                    }
-                });
-            }
-
-            Object.each(item.skills.main, function(value, name) {
-                if (pointSkill[name]) {
-                    value += ' (+' + pointSkill[name] + ')';
-                    delete(pointSkill[name]);
-                }
-                if (stounSkill[name]) {
-                    value += ' (+' + stounSkill[name] + ')'
-                    delete(stounSkill[name]);
-                }
-                skills[name] = value;
+        if (Object.getLength(stounSkill)) {
+            var s = {};
+            Object.each(stounSkill, function(i) {
+                if (Object.getLength(i))
+                    s[i.name] = (!s[i.name]) ? Number.from(i.value) : s[i.name] + Number.from(i.value);
             });
-            console.log(skills);
-            Object.each(pointSkill, function(value, name) {
-                if (stounSkill[name]) {
-                    value += ' (+' + stounSkill[name] + ')'
-                    delete(stounSkill[name]);
-                }
-                skills[name] = value;
-            });
-            console.log(skills);
-            Object.each(stounSkill, function(value, name) {
-                skills[name] = value;
-            });
-            console.log(skills);
-
-
-            if (that.message.message.getElements("[skill='main'] .point")) {
-                that.message.message.getElements("[skill='main'] .point").destroy();
-            }
-
-            Object.each(skills, function(value, name) {
-                if (that.message.message.getElement("[skill='main[" + name + "]']")) {
-                    that.message.message.getElement("[skill='main[" + name + "]']>span").set('html', value);
-                } else {
-                    new Element('div.skill.point', {
-                        html: name + ' <span>' + value + '</span>'
-                    }).inject(that.message.message.getElement("[skill='main']>.clear"), 'before');
-                }
-            });
+            stounSkill = s;
         }
+
+        if (Object.getLength(mainSkill)) Object.each(mainSkill, function(value, name) {
+            that.message.message.getElement("[data-skill='" + name + "']").set('html', name + ' <span>' + value + '</span>');
+        });
+
+        that.message.message.getElements("[data-skillType='point']").destroy();
+        //html += '<div class="skill" data-skillType="main" data-skill="main[' + name + ']">' + name + ' <span>' + value + '</span></div>';
+
+        if (Object.getLength(pointSkill)) Object.each(pointSkill, function(value, name) {
+            if (!value) return;
+            var skillItem = that.message.message.getElement("[data-skill='" + name + "']>span");
+            if (null != skillItem) {
+                skillItem.set('text', skillItem.get('text') + ' (+' + value + ')');
+            } else {
+                new Element('div.skill', {
+                    'data-skillType': 'point',
+                    'data-skill': name,
+                    html: name + ' <span>(+' + value + ')</span>'
+                }).inject(that.message.message.getElement("[skill='main']>.clear"), 'before');
+            }
+        });
+
+        if (Object.getLength(stounSkill)) Object.each(stounSkill, function(value, name) {
+            if (!value) return;
+            var skillItem = that.message.message.getElement("[data-skill='" + name + "']>span");
+            if (null != skillItem) {
+                skillItem.set('text', skillItem.get('text') + ' (+' + value + ')');
+            } else {
+                new Element('div.skill', {
+                    'data-skillType': 'point',
+                    'data-skill': name,
+                    html: name + ' <span>(+' + value + ')</span>'
+                }).inject(that.message.message.getElement("[skill='main']>.clear"), 'before');
+            }
+        });
+
     },
     compareHtml: function(item) {
         // PvP атака и PvP защита в доп параметры
@@ -1438,12 +1448,12 @@ var ItemCompare = new Class({
                     value += ' (+' + item.skills.point[name] + ')';
                     delete(pointSkill[name]);
                 }
-                html += '<div class="skill" skill="main[' + name + ']">' + name + ' <span>' + value + '</span></div>';
+                html += '<div class="skill" data-skillType="main" data-skill="' + name + '">' + name + ' <span>' + value + '</span></div>';
             });
 
             if (Object.getLength(pointSkill)) {
                 Object.each(pointSkill, function(value, name) {
-                    html += '<div class="skill" skill="main[' + name + ']">' + name + ' <span>+' + value + '</span></div>';
+                    html += '<div class="skill" data-skillType="main" data-skill="' + name + '">' + name + ' <span>+' + value + '</span></div>';
                 });
             }
 
@@ -1456,7 +1466,7 @@ var ItemCompare = new Class({
             html += '<div class="block" skill="other">';
 
             Object.each(item.skills.other, function(value, name) {
-                html += '<div class="skill" skill="other[' + name + ']">' + name + ' <span>' + value + '</span></div>';
+                html += '<div class="skill" data-skill="other[' + name + ']">' + name + ' <span>' + value + '</span></div>';
             });
 
             html += '<div class="clear"></div>' +
@@ -1505,10 +1515,5 @@ var ItemCompare = new Class({
 
         html += '</div></div>';
         return html;
-    },
-
-    // Инициализация диологового окна с вставкой камней
-    compareInsertStounInit: function(item) {
-        
     }
 });
