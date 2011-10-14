@@ -1,3 +1,9 @@
+body {
+    font-family: Tahoma, sans-serif;
+
+    font-size: 100%;
+    font-size: 0.875em;
+}
 .header {
     margin-top: 20px;
     margin-left: 40px;
@@ -228,3 +234,11 @@
 #findItem #findItem-list .post {line-height: 40px; cursor: pointer;color: #fff; background: #222222; border-bottom: 1px solid #205791;}
 #findItem #findItem-list .post img {float: left;}
 #findItem #findItem-list .post span {display: block; padding-left: 50px;}
+
+/* Item HTML */
+.itemHtml {}
+.itemHtml .title {font-size: 1.143em; font-weight: bold;}
+.itemHtml .type {text-align: right;}
+.itemHtml .type span {float: left;}
+.itemHtml .skills label {display: inline-block; font-weight: normal; width: 40%; padding-right: 20px;}
+.itemHtml .skills label span {float: right;}

@@ -21,6 +21,8 @@ var ItemList = new Class({
         }
     },
 
+    items: {},
+
 
     initialize: function(options) {
         this.setOptions(options);
@@ -124,13 +126,14 @@ var ItemList = new Class({
     displayItemList: function(postsJSON) {
         var that = this;
         postsJSON.each(function(post, i) {
-            //that.options.items[post['id']] = post;
+            that.items[post['id']] = new Item(post);
 
             var postDiv = new Element('div', {
                 'class': 'post' + ((post['q']) ? ' q' + post['q'] : ''),
                 'events': {
                     click: function(e) {
                         //that.armor.man.setItem(post);
+                        that.items[post['id']].createHtml().inject($('item'));
                     },
                     // Правый клик (сравнение)
                     contextmenu: function() {
@@ -182,3 +185,156 @@ var ItemList = new Class({
         }
     }
 });
+
+var Item = new Class({
+    Implements: [Options],
+    options: {
+        id: 0,
+        aion_id: 0,
+        name: '',
+        type: 0,
+        lvl: 0,
+        slot: 0,
+        q: 1,
+        skills: {
+            main: {},
+            other: {},
+            stoun: {}
+        },
+        pvp_atack: 0,
+        pvp_protect: 0,
+        ap_price: {
+            ap: 0,
+            medal: 0,
+            medal_name: ''
+        },
+        stoun: {
+            count: 5,
+            lvl: 60
+        },
+        magicstoun: 0,
+        longatack: 0,
+        complect: {},
+        info: '',
+        dopinfo: '',
+        smallimage: '',
+        image: ''
+    },
+
+    childItem: null,
+
+    initialize: function(options) {
+        this.setOptions(options);
+    },
+
+    /**
+     * Создание html представления
+     * @param int type 1 - all, 2 - only main, 3 - only other
+     */
+    createHtml: function(type) {
+        var type = type || 1;
+        var item = this.options;
+        var container = new Element('div', {
+            class: 'itemHtml'
+        });
+
+        if (1 == type || 2 == type) {
+            // Название
+            new Element('div', {
+                class: 'title q' + item.q,
+                html: item.name
+            }).inject(container);
+
+            // Тип
+            new Element('div', {
+                class: 'type',
+                html: '<span>Тип</span> ' + item.type
+            }).inject(container);
+
+            // Инфа и лвл
+            new Element('div', {
+                html: ((item.info) ? '<p>' + item.info + '</p>' : '') + '<p>Можно использовать с ' + item.lvl + '-го уровня</p>'
+            }).inject(container);
+
+            // ПВП статы
+            if (item.pvp_atack != 0) {
+                item.skills.main['PVP atack'] = item.pvp_atack;
+            }
+            if (item.pvp_protect != 0) {
+                item.skills.main['PVP protect'] = item.pvp_protect;
+            }
+
+            // Основные скилы
+            if (Object.getLength(item.skills.main)) {
+                var mainSkills = new Element('div', {
+                    class: 'skills',
+                    html: (item.dopinfo) ? '<div>' + item.dopinfo + '</div>' : ''
+                });
+
+                Object.each(item.skills.main, function(value, name) {
+                    new Element('label', {
+                        html: name + ' <span>' + value + '</span>'
+                    }).inject(mainSkills);
+                });
+                mainSkills.inject(container);
+            }
+        }
+
+        if (2 != type) {
+            var dSkills = [];
+
+            // Доп скилы
+            if (Object.getLength(item.skills.other)) {
+                var otherSkills = new Element('div', {
+                    class: 'skills'
+                });
+
+                Object.each(item.skills.other, function(value, name) {
+                    new Element('label', {
+                        html: name + ' <span>' + value + '</span>'
+                    }).inject(otherSkills);
+                });
+                dSkills.append([otherSkills]);
+            }
+
+            // Маг камни
+            if (item.stoun.count && Object.getLength(item.skills.stoun)) {
+                var stounSkills = new Element('div', {
+                    class: 'skills'
+                });
+
+                for (var i = 1; i <= item.stoun.count; i++) {
+                    if (item.skills.stoun[i]) {
+                        new Element('label', {
+                            html: item.skills.stoun[i].name + ' <span>' + item.skills.stoun[i].value + '</span>'
+                        }).inject(stounSkills);
+                    }
+                }
+                dSkills.append([stounSkills]);
+            }
+
+            dSkills = new Elements(dSkills);
+
+            if (3 == type) {
+                return dSkills;
+            } else {
+                dSkills.inject(container);
+            }
+        }
+
+        // Комбинированная пуха
+        if (1 == type && null !== this.childItem) {
+            var childItemContainer = this.childItem.createHtml(3);
+            childItemContainer.inject(container);
+        }
+
+        // ГГС
+        if ((1 == type || 2 == type) && item.magicstoun) {
+            new Element('div', {
+                html: 'Можно вставить магический камень'
+            }).inject(container);
+        }
+
+        return container;
+    }
+})
