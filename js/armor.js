@@ -338,3 +338,69 @@ var Item = new Class({
         return container;
     }
 })
+
+var MessageBox = new Class({
+    Implements: [Options],
+    options: {
+        element : null,
+        spiner  : null,
+        left    : null
+    },
+    initialize: function(options) {
+        this.setOptions(options);
+
+        if (null == this.options.element) throw new Error("Can't select element");
+
+        this.options.spiner = (null != $('spiner')) ? $('spiner') : new Element('div#spiner').inject(document.body);
+        this.options.left = this.options.element.getStyle('left');
+    },
+    show: function() {
+        var that = this;
+        var dialog = this.options.element;
+
+        this.options.spiner.getStyles({
+            display : '',
+            width   : '100%',
+            height  : '100%'
+        });
+
+        dialog.addClass('dialog');
+        dialog.setStyle('left', document.window.getSize().x / 2 - dialog.getSize().x / 2);
+    },
+    hide: function() {
+        var that = this;
+        var dialog = this.options.element;
+
+
+        this.options.spiner.setStyle('display', 'none');
+        dialog.setStyle('left', this.options.left);
+        dialog.removeClass('dialog');
+    }
+});
+
+Element.implement({
+    dialogEl: null,
+
+    show: function() {
+        this.setStyle('display', '');
+    },
+    hide: function() {
+        this.setStyle('display', 'none');
+    },
+    dialog: function(status) {
+        var status  = status || 'show';
+
+        if (null == this.dialogEl) {
+            this.dialogEl = new MessageBox({element: this});
+        }
+
+        switch (status) {
+            case 'show':
+                this.dialogEl.show();
+            break;
+            case 'hide':
+                this.dialogEl.hide();
+            break;
+        }
+    }
+});

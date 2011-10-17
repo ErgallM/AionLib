@@ -1,8 +1,6 @@
 body {
     font-family: Tahoma, sans-serif;
-
-    font-size: 100%;
-    font-size: 0.875em;
+    font-size: 12px;
 }
 .header {
     margin-top: 20px;
@@ -242,3 +240,30 @@ body {
 .itemHtml .type span {float: left;}
 .itemHtml .skills label {display: inline-block; font-weight: normal; width: 40%; padding-right: 20px;}
 .itemHtml .skills label span {float: right;}
+
+#spiner {
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    opacity: 0.7;
+    display: none;
+}
+.dialog {
+    background-color: white;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    border: solid 1px #ACACAC;
+    border-bottom-color: #999;
+    color: black;
+    outline: 0;
+    padding: 35px 40px;
+    position: absolute;
+    top: 0;
+    width: 450px;
+    z-index: 1101;
+}
